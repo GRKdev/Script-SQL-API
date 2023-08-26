@@ -43,8 +43,8 @@ class AlbaranesTab:
         
         self.train_prompts_list, self.valid_prompts_list = generate_random_prompts(train_count, valid_count)
         
-        train_filepath = "Documents/train.jsonl"
-        valid_filepath = "Documents/valid.jsonl"
+        train_filepath = "Documents/dicc/results/train.jsonl"
+        valid_filepath = "Documents/dicc/results/valid.jsonl"
 
         documento_tipo = self.generate_file(train_filepath, self.train_prompts_list)
         self.generate_file(valid_filepath, self.valid_prompts_list)

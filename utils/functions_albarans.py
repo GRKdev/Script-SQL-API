@@ -1,6 +1,6 @@
 import json
 import random
-from querys.albarranes.query_albarans import ALBARAN_QUERIES, FACTURAS_QUERIES, PEDIDOS_QUERIES
+from querys.albaranes.query_albarans import ALBARAN_QUERIES, FACTURAS_QUERIES, PEDIDOS_QUERIES
 
 def generate_random_prompts(train_count=100, valid_count=20, min_value=1, max_value=10000):
     train_prompts = [str(random.randint(min_value, max_value)) for _ in range(train_count)]

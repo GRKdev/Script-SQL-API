@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from utils.functions_articulos import generate_custom_queries, generate_proveedores_queries, load_prompts_from_json, generate_random_prompts
+from utils.functions_articulos import generate_custom_queries, generate_proveedores_queries, load_prompts_from_json, generate_random_numbers, generate_precioart_queries, generate_random_bars, generate_codebar_queries,generate_toda_la_info
 
 class ArticulosTab:
     def __init__(self, master):
@@ -11,7 +11,7 @@ class ArticulosTab:
 
         self.query_type_label = tk.Label(self.frame, text="Tipo de consulta:")
         self.query_type_label.grid(row=1, column=0, pady=(10, 10))
-        self.query_type = ttk.Combobox(self.frame, values=["Custom", "Proveidor","CodigoArticulo"], state="readonly")
+        self.query_type = ttk.Combobox(self.frame, values=["Articulos", "Proveidor","CodigoArticulo","PrecioArticulo", "CodeBar","todo","todo_codigo"], state="readonly")
         self.query_type.grid(row=1, column=1, pady=(10, 10))
         self.query_type.set("Custom") 
 
@@ -39,7 +39,11 @@ class ArticulosTab:
         valid_count = int(train_count * 0.20)
         
         if self.query_type.get() == "CodigoArticulo":
-            self.train_prompts_list, self.valid_prompts_list = generate_random_prompts(train_count, valid_count)
+            self.train_prompts_list, self.valid_prompts_list = generate_random_numbers(train_count, valid_count)
+        elif self.query_type.get() == "todo_codigo":
+            self.train_prompts_list, self.valid_prompts_list = generate_random_numbers(train_count, valid_count)
+        elif self.query_type.get() == "CodeBar":
+            self.train_prompts_list, self.valid_prompts_list = generate_random_bars(train_count, valid_count)
         else:
             original_train_prompts = load_prompts_from_json()
             original_valid_prompts = load_prompts_from_json()
@@ -47,8 +51,8 @@ class ArticulosTab:
             self.train_prompts_list = [original_train_prompts[i % len(original_train_prompts)] for i in range(train_count)]
             self.valid_prompts_list = [original_valid_prompts[i % len(original_valid_prompts)] for i in range(valid_count)]
         
-        train_filepath = "Documents/train.jsonl"
-        valid_filepath = "Documents/valid.jsonl"
+        train_filepath = "Documents/dicc/results/train.jsonl"
+        valid_filepath = "Documents/dicc/results/valid.jsonl"
 
         documento_tipo = self.generate_file(train_filepath, self.train_prompts_list)
         self.generate_file(valid_filepath, self.valid_prompts_list)
@@ -64,13 +68,24 @@ class ArticulosTab:
         if self.query_type.get() == "Proveidor":
             documento_tipo = "Proveidor"            
             generate_proveedores_queries(generated_lines, table_name, function_name, prompts_list)
-        elif self.query_type.get() == "Custom":
+        elif self.query_type.get() == "Articulos":
             documento_tipo = "Articulos"            
             generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
         elif self.query_type.get() == "CodigoArticulo":
-            documento_tipo = "Codigo_Articulo"            
+            documento_tipo = "CodigoArticulo"            
             generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
-
+        elif self.query_type.get() == "PrecioArticulo":
+            documento_tipo = "PrecioArticulo"            
+            generate_precioart_queries(generated_lines, table_name, function_name, prompts_list)         
+        elif self.query_type.get() == "CodeBar":
+            documento_tipo = "CodeBar"
+            generate_codebar_queries(generated_lines, table_name, function_name, prompts_list)
+        elif self.query_type.get() == "todo":
+            documento_tipo = "todo"            
+            generate_toda_la_info(generated_lines, table_name, function_name, prompts_list)            
+        elif self.query_type.get() == "todo_codigo":
+            documento_tipo = "todo_codigo"            
+            generate_toda_la_info(generated_lines, table_name, function_name, prompts_list)   
 
         with open(filepath, 'a', encoding='utf-8') as file:
             for line in generated_lines:

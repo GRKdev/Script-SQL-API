@@ -1,5 +1,6 @@
 import json
-from querys.clients.query_clients import CLIENT_QUERIES, TELEFON_QUERIES, EMAIL_QUERIES, DIRECCIO_QUERIES, CLIENT_MULTI_QUERIES, TELEFON_QUERIES_MULTIPLE, EMAIL_QUERIES_MULTIPLE, DIRECCIO_QUERIES_MULTIPLE
+from querys.clients.query_clients import CLIENT_QUERIES, TELEFON_QUERIES, EMAIL_QUERIES, DIRECCIO_QUERIES, CLIENT_MULTI_QUERIES, TELEFON_QUERIES_MULTIPLE, EMAIL_QUERIES_MULTIPLE, DIRECCIO_QUERIES_MULTIPLE, CLIENTE_TELEFONO_QUERIES, CLIENTES_COMPLETOS_QUERIES
+import random
 
 def filter_prompt(prompt):
     words = prompt.split()
@@ -36,6 +37,26 @@ def generate_url_query(table_name, function_name, *prompts):
         prompt_components.append(f"{function_name}{suffix}={clean_prompt}")
     prompt_string = '&'.join(prompt_components)
     return f"api/{table_name}?{prompt_string}&&"
+
+def generate_phone_numbers(train_count=100, valid_count=20, country='es'):
+    def generate_phone_number(country='es'):
+        include_prefix = random.choice([True, False])
+
+        if country == 'es':
+            prefix = "+34" if include_prefix else ""
+            first_digit = random.choice(['6', '7'])
+            phone = f"{first_digit}{''.join([str(random.randint(0, 9)) for _ in range(8)])}"
+            return f"{prefix}{phone}" if include_prefix else phone
+
+        elif country == 'ad':
+            prefix = "+376" if include_prefix else ""
+            first_digit = random.choice(['6', '8', '7'])
+            phone = f"{first_digit}{''.join([str(random.randint(0, 9)) for _ in range(5)])}"
+            return f"{prefix}{phone}" if include_prefix else phone
+
+    train_prompts = [generate_phone_number(country) for _ in range(train_count)]
+    valid_prompts = [generate_phone_number(country) for _ in range(valid_count)]
+    return train_prompts, valid_prompts
 
 
 def generate_custom_queries(generated_lines, table_name, function_name, prompts_list):
@@ -133,3 +154,25 @@ def generate_direc_multi(generated_lines, table_name, function_name, prompts_lis
                 "completion": query
             }
             generated_lines.append(json.dumps(line, ensure_ascii=False))            
+
+def generate_from_telefon(generated_lines, table_name, function_name, prompts_list):
+    for idx, prompt in enumerate(prompts_list):
+        query_format = CLIENTE_TELEFONO_QUERIES[idx % len(CLIENTE_TELEFONO_QUERIES)]
+        prompt_text = query_format.format(prompt=prompt)
+        query = generate_url_query(table_name, function_name, prompt)
+        line = {
+            "prompt": prompt_text,
+            "completion": query
+        }
+        generated_lines.append(json.dumps(line, ensure_ascii=False))
+
+def generate_todo_clientes(generated_lines, table_name, function_name, prompts_list):
+    for idx, prompt in enumerate(prompts_list):
+        query_format = CLIENTES_COMPLETOS_QUERIES[idx % len(CLIENTES_COMPLETOS_QUERIES)]
+        prompt_text = query_format.format(prompt=prompt)
+        query = generate_url_query(table_name, function_name, prompt)
+        line = {
+            "prompt": prompt_text,
+            "completion": query
+        }
+        generated_lines.append(json.dumps(line, ensure_ascii=False))
