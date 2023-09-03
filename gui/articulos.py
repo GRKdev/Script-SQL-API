@@ -1,91 +1,115 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 from utils.functions_articulos import generate_custom_queries, generate_proveedores_queries, load_prompts_from_json, generate_random_numbers, generate_precioart_queries, generate_random_bars, generate_codebar_queries,generate_toda_la_info
 
 class ArticulosTab:
     def __init__(self, master):
         self.frame = ttk.Frame(master)
-
-        self.train_prompts_list = load_prompts_from_json
-        self.valid_prompts_list = load_prompts_from_json
-
-        self.query_type_label = tk.Label(self.frame, text="Tipo de consulta:")
-        self.query_type_label.grid(row=1, column=0, pady=(10, 10))
-        self.query_type = ttk.Combobox(self.frame, values=["Articulos", "Proveidor","CodigoArticulo","PrecioArticulo", "CodeBar","todo","todo_codigo"], state="readonly")
-        self.query_type.grid(row=1, column=1, pady=(10, 10))
-        self.query_type.set("Custom") 
-
-        self.label_train_count = tk.Label(self.frame, text="Quantitat dades Train(20% Valid)")
-        self.label_train_count.grid(row=2, column=0, pady=(10, 10))
-        self.entry_train_count = tk.Entry(self.frame)
-        self.entry_train_count.grid(row=2, column=1, pady=(10, 10))
-        self.entry_train_count.insert(0, "100")
         
         self.label_table = tk.Label(self.frame, text="Nom de la taula:")
-        self.label_table.grid(row=3, column=0, pady=(10, 5))
+        self.label_table.grid(row=0, column=0)
         self.entry_table = tk.Entry(self.frame)
-        self.entry_table.grid(row=3, column=1, pady=(10, 5))
+        self.entry_table.grid(row=0, column=1)
 
-        self.label_function_name = tk.Label(self.frame, text="Nom de la funció:")
-        self.label_function_name.grid(row=4, column=0, pady=(10, 5))
-        self.entry_function_name = tk.Entry(self.frame)
-        self.entry_function_name.grid(row=4, column=1, pady=(10, 5))
+        self.label_global_train_count = tk.Label(self.frame, text="Cantidad Train Global:")
+        self.label_global_train_count.grid(row=0, column=2)
+        self.entry_global_train_count = tk.Entry(self.frame)
+        self.entry_global_train_count.grid(row=0, column=3)
+        self.entry_global_train_count.insert(0, "10")
+        self.entry_global_train_count.bind('<KeyRelease>', self.update_all_train_counts)
+        
+        tk.Label(self.frame, text="Cantidad Train").grid(row=1, column=2)
+        self.button_toggle_all = tk.Button(self.frame, text="Toggle All", command=self.toggle_all)
+        self.button_toggle_all.grid(row=1, column=3)
 
+        self.query_types = ["Articulos","CodigoArticulo","PrecioArticulo", "PrecioCode", "CodeBar","todo","todo_codigo"]
+        self.query_entries = {}
+        self.query_train_counts = {}
+        self.query_checkbutton_vars = {}
+        self.query_checkbuttons = {}
+
+        for idx, q_type in enumerate(self.query_types):
+            tk.Label(self.frame, text=f"{q_type} : ").grid(row=idx + 2, column=0)
+            self.query_entries[q_type] = tk.Entry(self.frame)
+            self.query_entries[q_type].grid(row=idx + 2, column=1)
+            
+            self.query_train_counts[q_type] = tk.Entry(self.frame)
+            self.query_train_counts[q_type].grid(row=idx + 2, column=2)
+            self.query_train_counts[q_type].insert(0, "10")
+            
+            self.query_checkbutton_vars[q_type] = tk.BooleanVar()
+            self.query_checkbuttons[q_type] = tk.Checkbutton(self.frame, variable=self.query_checkbutton_vars[q_type])
+            self.query_checkbuttons[q_type].grid(row=idx + 2, column=3)
+        
         self.button_generate = tk.Button(self.frame, text="Genera el Arxiu", command=self.generate_jsonl)
-        self.button_generate.grid(row=12, column=0, columnspan=2, pady=(20, 10))
+        self.button_generate.grid(row=len(self.query_types) + 2, column=0, columnspan=4)
+
+    def toggle_all(self):
+        new_state = not any(var.get() for var in self.query_checkbutton_vars.values())
+        for var in self.query_checkbutton_vars.values():
+            var.set(new_state)
+
+
+    def update_all_train_counts(self):
+        global_value = self.entry_global_train_count.get()
+        for entry in self.query_train_counts.values():
+            entry.delete(0, tk.END)
+            entry.insert(0, global_value)
 
     def generate_jsonl(self):
-        train_count = int(self.entry_train_count.get())
-        valid_count = int(train_count * 0.20)
-        
-        if self.query_type.get() == "CodigoArticulo":
-            self.train_prompts_list, self.valid_prompts_list = generate_random_numbers(train_count, valid_count)
-        elif self.query_type.get() == "todo_codigo":
-            self.train_prompts_list, self.valid_prompts_list = generate_random_numbers(train_count, valid_count)
-        elif self.query_type.get() == "CodeBar":
-            self.train_prompts_list, self.valid_prompts_list = generate_random_bars(train_count, valid_count)
-        else:
-            original_train_prompts = load_prompts_from_json()
-            original_valid_prompts = load_prompts_from_json()
+        function_names = {q_type: entry.get().strip() for q_type, entry in self.query_entries.items() if self.query_checkbutton_vars[q_type].get()}
+        default_train_count = int(self.entry_train_count.get()) if hasattr(self, 'entry_train_count') else 100
 
-            self.train_prompts_list = [original_train_prompts[i % len(original_train_prompts)] for i in range(train_count)]
-            self.valid_prompts_list = [original_valid_prompts[i % len(original_valid_prompts)] for i in range(valid_count)]
-        
-        train_filepath = "Documents/dicc/results/train.jsonl"
-        valid_filepath = "Documents/dicc/results/valid.jsonl"
+        for query_type, function_name in function_names.items():
+            train_count = int(self.query_train_counts.get(query_type, default_train_count).get())
+            valid_count = int(train_count * 0.20)
 
-        documento_tipo = self.generate_file(train_filepath, self.train_prompts_list)
-        self.generate_file(valid_filepath, self.valid_prompts_list)
+            if query_type == "CodigoArticulo":
+                train_data, valid_data = generate_random_numbers(train_count, valid_count)
+            elif query_type == "todo_codigo":
+                train_data, valid_data = generate_random_numbers(train_count, valid_count)
+            elif query_type == "CodeBar":
+                train_data, valid_data = generate_random_bars(train_count, valid_count)
+            elif query_type == "PrecioCode":
+                train_data, valid_data = generate_random_numbers(train_count, valid_count)            
+            else:
+                original_train_prompts = load_prompts_from_json()
+                original_valid_prompts = load_prompts_from_json()
+                train_data = [original_train_prompts[i % len(original_train_prompts)] for i in range(train_count)]
+                valid_data = [original_valid_prompts[i % len(original_valid_prompts)] for i in range(valid_count)]
 
-        messagebox.showinfo("Correcte", f"Arxius JsonL de {documento_tipo} creats amb exit!")
+            train_filepath = "Documents/dicc/results/train.jsonl"
+            valid_filepath = "Documents/dicc/results/valid.jsonl"
 
-    def generate_file(self, filepath, prompts_list):
+            self.generate_file(train_filepath, train_data, query_type, function_name)
+            self.generate_file(valid_filepath, valid_data, query_type, function_name)
+
+    def generate_file(self, filepath, prompts_list, query_type, function_name): 
         table_name = self.entry_table.get().strip()
-        function_name = self.entry_function_name.get().strip()
-
         generated_lines = []
 
-        if self.query_type.get() == "Proveidor":
-            documento_tipo = "Proveidor"            
-            generate_proveedores_queries(generated_lines, table_name, function_name, prompts_list)
-        elif self.query_type.get() == "Articulos":
+        if query_type == "PrecioCode":
+            documento_tipo = "PrecioCode"            
+            generate_precioart_queries(generated_lines, table_name, function_name, prompts_list)
+        elif query_type == "Articulos":
             documento_tipo = "Articulos"            
             generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
-        elif self.query_type.get() == "CodigoArticulo":
+        elif query_type == "CodigoArticulo":
             documento_tipo = "CodigoArticulo"            
             generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
-        elif self.query_type.get() == "PrecioArticulo":
+        elif query_type == "PrecioArticulo":
             documento_tipo = "PrecioArticulo"            
             generate_precioart_queries(generated_lines, table_name, function_name, prompts_list)         
-        elif self.query_type.get() == "CodeBar":
+        elif query_type == "CodeBar":
             documento_tipo = "CodeBar"
             generate_codebar_queries(generated_lines, table_name, function_name, prompts_list)
-        elif self.query_type.get() == "todo":
+        elif query_type == "todo":
             documento_tipo = "todo"            
             generate_toda_la_info(generated_lines, table_name, function_name, prompts_list)            
-        elif self.query_type.get() == "todo_codigo":
+        elif query_type == "todo_codigo":
             documento_tipo = "todo_codigo"            
             generate_toda_la_info(generated_lines, table_name, function_name, prompts_list)   
+
 
         with open(filepath, 'a', encoding='utf-8') as file:
             for line in generated_lines:
