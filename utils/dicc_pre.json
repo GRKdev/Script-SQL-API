@@ -1,0 +1,23 @@
+{
+    "clientes": {
+      "todo_cliente": "all",
+      "Info_Basic": "info",
+      "Telefon": "tlf",
+      "Email": "mail",
+      "Direccion": "dire",
+      "Info_Multi": "info",
+      "Telefon_Multi": "tlf",
+      "Email_Multi": "mail",
+      "Direccion_Multi": "dire",
+      "Telefono_cliente": "clitlf"
+    },
+    "articulos": {
+      "Articulos": "info",
+      "CodigoArticulo": "code",
+      "PrecioArticulo": "price",
+      "PrecioCode": "pricecode",
+      "CodeBar": "bar",
+      "todo": "all",
+      "todo_codigo": "allcode"
+    }
+  }

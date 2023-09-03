@@ -1,6 +1,21 @@
 import tkinter as tk
 from tkinter import ttk
-from utils.functions_articulos import generate_custom_queries, generate_proveedores_queries, load_prompts_from_json, generate_random_numbers, generate_precioart_queries, generate_random_bars, generate_codebar_queries,generate_toda_la_info
+import os
+import json
+from utils.functions_articulos import (
+    generate_custom_queries, load_prompts_from_json, generate_random_numbers,
+    generate_precioart_queries, generate_random_bars, generate_codebar_queries,
+    generate_toda_la_info
+)
+
+
+def load_predefined_values():
+    file_path = os.path.join("utils", "dicc_pre.json")
+    with open(file_path, 'r') as f:
+        return json.load(f)
+    
+predefined_values = load_predefined_values()
+articulos_predefined = predefined_values["articulos"]
 
 class ArticulosTab:
     def __init__(self, master):
@@ -10,6 +25,7 @@ class ArticulosTab:
         self.label_table.grid(row=0, column=0)
         self.entry_table = tk.Entry(self.frame)
         self.entry_table.grid(row=0, column=1)
+        self.entry_table.insert(0, "art")
 
         self.label_global_train_count = tk.Label(self.frame, text="Cantidad Train Global:")
         self.label_global_train_count.grid(row=0, column=2)
@@ -33,6 +49,9 @@ class ArticulosTab:
             self.query_entries[q_type] = tk.Entry(self.frame)
             self.query_entries[q_type].grid(row=idx + 2, column=1)
             
+            if q_type in articulos_predefined:
+                self.query_entries[q_type].insert(0, articulos_predefined[q_type])
+
             self.query_train_counts[q_type] = tk.Entry(self.frame)
             self.query_train_counts[q_type].grid(row=idx + 2, column=2)
             self.query_train_counts[q_type].insert(0, "10")

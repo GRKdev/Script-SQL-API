@@ -1,12 +1,22 @@
 import tkinter as tk
 from tkinter import ttk
 from random import shuffle
+import json
+import os
 from utils.functions_clients import (
     generate_custom_queries, generate_telefon_queries, generate_email_queries,
     generate_direccio_queries, load_names_from_json, generate_custom_queries_multi,
     generate_direc_multi, generate_email_multi, generate_telefon_multi,
     generate_from_telefon, generate_phone_numbers, generate_todo_clientes
 )
+
+def load_predefined_values():
+    file_path = os.path.join("utils", "dicc_pre.json")
+    with open(file_path, 'r') as f:
+        return json.load(f)
+    
+predefined_values = load_predefined_values()
+clientes_predefined = predefined_values['clientes']
 
 class ClientTab:
     def __init__(self, master):
@@ -16,6 +26,7 @@ class ClientTab:
         self.label_table.grid(row=0, column=0)
         self.entry_table = tk.Entry(self.frame)
         self.entry_table.grid(row=0, column=1)
+        self.entry_table.insert(0, "cli")  
 
         self.label_global_train_count = tk.Label(self.frame, text="Cantidad Train Global:")
         self.label_global_train_count.grid(row=0, column=2)
@@ -37,6 +48,9 @@ class ClientTab:
             tk.Label(self.frame, text=f"{q_type} : ").grid(row=idx + 2, column=0)
             self.query_entries[q_type] = tk.Entry(self.frame)
             self.query_entries[q_type].grid(row=idx + 2, column=1)
+
+            if q_type in clientes_predefined:
+                self.query_entries[q_type].insert(0, clientes_predefined[q_type])
 
             self.query_train_counts[q_type] = tk.Entry(self.frame)
             self.query_train_counts[q_type].grid(row=idx + 2, column=2)
