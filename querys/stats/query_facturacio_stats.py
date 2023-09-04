@@ -41,7 +41,7 @@ FACT_ANUALES_Q = [
     "Facturació global d'últims anys",
     "Informe sobre facturación globales de la empresa",
     "Resumen de cifras totales facturadas",
-    "Dame un informe sobre la facturación total anual",
+    "Dame un informe sobre la facturación total",
     "Facturación total reciente de la empresa",
     "Informe consolidado de facturación total",
     "Total de facturación de los pasados años",

@@ -33,8 +33,8 @@ class ArticulosTab:
         self.entry_global_train_count.grid(row=0, column=3)
         self.entry_global_train_count.insert(0, "10")
         self.entry_global_train_count.bind('<KeyRelease>', self.update_all_train_counts)
-        
         tk.Label(self.frame, text="Cantidad Train").grid(row=1, column=2)
+
         self.button_toggle_all = tk.Button(self.frame, text="Toggle All", command=self.toggle_all)
         self.button_toggle_all.grid(row=1, column=3)
 
@@ -69,7 +69,7 @@ class ArticulosTab:
             var.set(new_state)
 
 
-    def update_all_train_counts(self):
+    def update_all_train_counts(self, event):
         global_value = self.entry_global_train_count.get()
         for entry in self.query_train_counts.values():
             entry.delete(0, tk.END)

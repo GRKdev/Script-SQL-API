@@ -11,10 +11,6 @@ class JsonLGenerator:
         self.master = master
         master.title("Script Jsonl Training - OpenAI")
 
-        style = ttk.Style()
-        style.configure("TNotebook", background='#ccc')  # Cambiar el fondo del Notebook
-        style.map("TNotebook.Tab", background=[("selected", "#ff0000")])  # Cambiar el fondo de la pestaña seleccionada a rojo
-
         self.notebook = ttk.Notebook(master)
 
         self.notebook = ttk.Notebook(master, style='TNotebook')

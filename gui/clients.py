@@ -18,7 +18,7 @@ def load_predefined_values():
 predefined_values = load_predefined_values()
 clientes_predefined = predefined_values['clientes']
 
-class ClientTab:
+class ArticulosTab:
     def __init__(self, master):
         self.frame = ttk.Frame(master)
         
@@ -26,15 +26,16 @@ class ClientTab:
         self.label_table.grid(row=0, column=0)
         self.entry_table = tk.Entry(self.frame)
         self.entry_table.grid(row=0, column=1)
-        self.entry_table.insert(0, "cli")  
+        self.entry_table.insert(0, "art")
 
         self.label_global_train_count = tk.Label(self.frame, text="Cantidad Train Global:")
         self.label_global_train_count.grid(row=0, column=2)
         self.entry_global_train_count = tk.Entry(self.frame)
         self.entry_global_train_count.grid(row=0, column=3)
-        self.entry_global_train_count.insert(0, "10")  
-        self.entry_global_train_count.bind('<KeyRelease>', self.update_all_train_counts) 
+        self.entry_global_train_count.insert(0, "10")
+        self.entry_global_train_count.bind('<KeyRelease>', self.update_all_train_counts)
         tk.Label(self.frame, text="Cantidad Train").grid(row=1, column=2)
+
         self.button_toggle_all = tk.Button(self.frame, text="Toggle All", command=self.toggle_all)
         self.button_toggle_all.grid(row=1, column=3)        
 
