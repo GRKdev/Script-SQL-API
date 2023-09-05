@@ -18,7 +18,7 @@ def load_predefined_values():
 predefined_values = load_predefined_values()
 clientes_predefined = predefined_values['clientes']
 
-class ArticulosTab:
+class ClientTab:
     def __init__(self, master):
         self.frame = ttk.Frame(master)
         

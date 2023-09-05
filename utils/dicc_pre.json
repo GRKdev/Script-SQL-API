@@ -19,5 +19,8 @@
       "CodeBar": "bar",
       "todo": "all",
       "todo_codigo": "allcode"
+    },
+    "albaranes": {
+      "todo_alb": "all"
     }
   }

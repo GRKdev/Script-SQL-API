@@ -75,6 +75,10 @@ ALBARAN_QUERIES = [
     "{prompt} revisar albaran"   
 ]
 
+ALB_CLIENT_DETAIL = [
+    
+]
+
 PEDIDOS_QUERIES = [
     "Ped {prompt}",
     "ped {prompt}",

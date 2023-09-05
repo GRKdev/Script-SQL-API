@@ -1,45 +1,79 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+import json
+import os
 from utils.functions_albarans import generate_albaran_queries, generate_pedidos_queries, generate_facturas_queries, generate_random_prompts
+
+def load_predefined_values():
+    file_path = os.path.join("utils", "dicc_pre.json")
+    with open(file_path, 'r') as f:
+        return json.load(f)
+
+predefined_values = load_predefined_values()
+clientes_predefined = predefined_values['albaranes']
+
 
 class AlbaranesTab:
     def __init__(self, master):
         self.frame = ttk.Frame(master)
-        self.train_prompts_list, self.valid_prompts_list = generate_random_prompts()
-        self.create_gui()
-
-    def create_gui(self):
-
-        self.query_type_label = tk.Label(self.frame, text="Tipo de consulta:")
-        self.query_type_label.grid(row=1, column=0, pady=(10, 10))
-        self.query_type = ttk.Combobox(self.frame, values=["Albaran", "Factura", "Pedido"], state="readonly")
-        self.query_type.grid(row=1, column=1, pady=(10, 10))
-        self.query_type.set("Custom") 
-
-        self.label_train_count = tk.Label(self.frame, text="Quantitat dades Train(20% Valid)")
-        self.label_train_count.grid(row=2, column=0, pady=(10, 10))
-        self.entry_train_count = tk.Entry(self.frame)
-        self.entry_train_count.grid(row=2, column=1, pady=(10, 10))
-        self.entry_train_count.insert(0, "100")  # Valor por defecto
-
+        
         self.label_table = tk.Label(self.frame, text="Nom de la taula:")
-        self.label_table.grid(row=3, column=0, pady=(10, 5))
+        self.label_table.grid(row=0, column=0)
         self.entry_table = tk.Entry(self.frame)
-        self.entry_table.grid(row=3, column=1, pady=(10, 5))
+        self.entry_table.grid(row=0, column=1)
+        self.entry_table.insert(0, "alb")
 
-        self.label_function_name = tk.Label(self.frame, text="Nom de la funció:")
-        self.label_function_name.grid(row=4, column=0, pady=(10, 5))
-        self.entry_function_name = tk.Entry(self.frame)
-        self.entry_function_name.grid(row=4, column=1, pady=(10, 5))
+        self.label_global_train_count = tk.Label(self.frame, text="Cantidad Train Global:")
+        self.label_global_train_count.grid(row=0, column=2)
+        self.entry_global_train_count = tk.Entry(self.frame)
+        self.entry_global_train_count.grid(row=0, column=3)
+        self.entry_global_train_count.insert(0, "10")
+        self.entry_global_train_count.bind('<KeyRelease>', self.update_all_train_counts)
+        tk.Label(self.frame, text="Cantidad Train").grid(row=1, column=2)
 
-        # Botón de generar archivo
+        self.button_toggle_all = tk.Button(self.frame, text="Toggle All", command=self.toggle_all)
+        self.button_toggle_all.grid(row=1, column=3)        
+
+        self.query_types = ["todo_alb", "DetalleCliente"]
+        self.query_entries = {}
+        self.query_train_counts = {}
+        self.query_checkbutton_vars = {}
+        self.query_checkbuttons = {}         
+
+        for idx, q_type in enumerate(self.query_types):
+            tk.Label(self.frame, text=f"{q_type} : ").grid(row=idx + 2, column=0)
+            self.query_entries[q_type] = tk.Entry(self.frame)
+            self.query_entries[q_type].grid(row=idx + 2, column=1)
+
+            if q_type in clientes_predefined:
+                self.query_entries[q_type].insert(0, clientes_predefined[q_type])
+
+            self.query_train_counts[q_type] = tk.Entry(self.frame)
+            self.query_train_counts[q_type].grid(row=idx + 2, column=2)
+            self.query_train_counts[q_type].insert(0, "10")
+
+            self.query_checkbutton_vars[q_type] = tk.BooleanVar()
+            self.query_checkbuttons[q_type] = tk.Checkbutton(self.frame, variable=self.query_checkbutton_vars[q_type])
+            self.query_checkbuttons[q_type].grid(row=idx + 2, column=3)
+                
         self.button_generate = tk.Button(self.frame, text="Genera el Arxiu", command=self.generate_jsonl)
-        self.button_generate.grid(row=12, column=0, columnspan=2, pady=(20, 10))
+        self.button_generate.grid(row=len(self.query_types) + 2, column=0, columnspan=4)
+
+    def toggle_all(self):
+        new_state = not any(var.get() for var in self.query_checkbutton_vars.values())
+        for var in self.query_checkbutton_vars.values():
+            var.set(new_state)
+
+    def update_all_train_counts(self, event):
+        global_value = self.entry_global_train_count.get()
+        for entry in self.query_train_counts.values():
+            entry.delete(0, tk.END)
+            entry.insert(0, global_value)
 
 
     def generate_jsonl(self):
         train_count = int(self.entry_train_count.get())
-        valid_count = int(train_count * 0.20)  # Calcula el 20%
+        valid_count = int(train_count * 0.20)
         
         self.train_prompts_list, self.valid_prompts_list = generate_random_prompts(train_count, valid_count)
         
