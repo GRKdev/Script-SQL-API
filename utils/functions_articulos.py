@@ -27,9 +27,21 @@ def generate_random_numbers(train_count=100, valid_count=20, min_value=1, max_va
     valid_prompts = [str(random.randint(min_value, max_value)) for _ in range(valid_count)]
     return train_prompts, valid_prompts
 
-def generate_random_bars(train_count=100, valid_count=20, min_value=100000000000, max_value=9999999999999):
-    train_prompts = [str(random.randint(min_value, max_value)) for _ in range(train_count)]
-    valid_prompts = [str(random.randint(min_value, max_value)) for _ in range(valid_count)]
+def generate_random_bars(train_count=100, valid_count=20):
+    half_train = train_count // 2
+    half_valid = valid_count // 2
+
+    train_12_digits = [str(i) + str(random.randint(10**(10) , 10**(11) - 1)) for i in range(1, 10) for _ in range(half_train // 9)]
+    valid_12_digits = [str(i) + str(random.randint(10**(10) , 10**(11) - 1)) for i in range(1, 10) for _ in range(half_valid // 9)]
+
+    train_13_digits = [str(i) + str(random.randint(10**(11), 10**(12) - 1)) for i in range(1, 10) for _ in range(half_train // 9)]
+    valid_13_digits = [str(i) + str(random.randint(10**(11), 10**(12) - 1)) for i in range(1, 10) for _ in range(half_valid // 9)]
+
+    train_prompts = train_12_digits + train_13_digits
+    valid_prompts = valid_12_digits + valid_13_digits
+    random.shuffle(train_prompts)
+    random.shuffle(valid_prompts)
+
     return train_prompts, valid_prompts
 
 def load_prompts_from_json(filename="Documents/dicc/articulos/articulos_general.json"):
