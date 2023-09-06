@@ -76,7 +76,8 @@ ALBARAN_QUERIES = [
 ]
 
 ALB_CLIENT_DETAIL = [
-    
+    "{prompt} revisar albaran"   
+
 ]
 
 PEDIDOS_QUERIES = [

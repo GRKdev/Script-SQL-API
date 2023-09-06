@@ -1,8 +1,8 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 import json
 import os
-from utils.functions_albarans import generate_albaran_queries, generate_pedidos_queries, generate_facturas_queries, generate_random_prompts
+from utils.functions_albarans import generate_albaran_all, generate_random_prompts, generate_albaran_detalle_cliente
 
 def load_predefined_values():
     file_path = os.path.join("utils", "dicc_pre.json")
@@ -72,35 +72,34 @@ class AlbaranesTab:
 
 
     def generate_jsonl(self):
-        train_count = int(self.entry_train_count.get())
-        valid_count = int(train_count * 0.20)
+        function_names = {q_type: entry.get().strip() for q_type, entry in self.query_entries.items() if self.query_checkbutton_vars[q_type].get()}
+        default_train_count = int(self.entry_train_count.get()) if hasattr(self, 'entry_train_count') else 100
         
-        self.train_prompts_list, self.valid_prompts_list = generate_random_prompts(train_count, valid_count)
-        
-        train_filepath = "Documents/dicc/results/train.jsonl"
-        valid_filepath = "Documents/dicc/results/valid.jsonl"
+        for query_type, function_name in function_names.items():
+            train_count = int(self.query_train_counts.get(query_type, default_train_count).get())
+            valid_count = int(train_count * 0.20)
 
-        documento_tipo = self.generate_file(train_filepath, self.train_prompts_list)
-        self.generate_file(valid_filepath, self.valid_prompts_list)
+            self.train_prompts_list, self.valid_prompts_list = generate_random_prompts(train_count, valid_count)
+            
+            train_filepath = "Documents/dicc/results/train.jsonl"
+            valid_filepath = "Documents/dicc/results/valid.jsonl"
+           
+            self.generate_file(train_filepath, self.train_prompts_list, query_type, function_name)
+            self.generate_file(valid_filepath, self.valid_prompts_list, query_type, function_name) 
 
-        messagebox.showinfo("Correcte", f"Arxius JsonL de {documento_tipo} creats amb exit!")
-
-    def generate_file(self, filepath, prompts_list):
-        table_name = self.entry_table.get().strip()
-        function_name = self.entry_function_name.get().strip()
-
+    def generate_file(self, filepath, prompts_list, query_type, function_name):
+        documento_tipo = None
         generated_lines = []
 
-        if self.query_type.get() == "Albaran":
-            documento_tipo = "Albaran"            
-            generate_albaran_queries(generated_lines, table_name, function_name, prompts_list)
-        elif self.query_type.get() == "Pedido":
-            documento_tipo = "Pedido"            
-            generate_pedidos_queries(generated_lines, table_name, function_name, prompts_list)
-        elif self.query_type.get() == "Factura":
-            documento_tipo = "Factura"            
-            generate_facturas_queries(generated_lines, table_name, function_name, prompts_list)
+        if query_type == "todo_alb":
+            documento_tipo = "todo_alb"            
+            generate_albaran_all(generated_lines, function_name, prompts_list)
+        elif query_type == "DetalleCliente":
+            documento_tipo = "DetalleCliente"            
+            generate_albaran_detalle_cliente(generated_lines, function_name, prompts_list)
 
+        if documento_tipo is None:
+            return "Tipo de documento no reconocido"
 
         with open(filepath, 'a', encoding='utf-8') as file:
             for line in generated_lines:

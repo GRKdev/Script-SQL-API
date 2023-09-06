@@ -39,7 +39,11 @@ class ClientTab:
         self.button_toggle_all = tk.Button(self.frame, text="Toggle All", command=self.toggle_all)
         self.button_toggle_all.grid(row=1, column=3)        
 
-        self.query_types = ["todo_cliente", "Info_Basic", "Telefon", "Email", "Direccion", "Info_Multi", "Telefon_Multi", "Email_Multi", "Direccion_Multi", "Telefono_cliente"]
+        self.query_types = [
+            "todo_cliente", "Info_Basic", "Telefon", "Email", "Direccion", "Info_Multi",
+            "Telefon_Multi", "Email_Multi", "Direccion_Multi", "Telefono_cliente"
+            ]
+        
         self.query_entries = {}
         self.query_train_counts = {}
         self.query_checkbutton_vars = {}
