@@ -18,7 +18,7 @@ def generate_url_query_all_albaran(function_name, prompt):
 
 def generate_url_query_details_client(function_name, prompt):
     prompt_components = ','.join(prompt.split())
-    return f"/api/alb/detailclient?{function_name}={prompt_components}&&"
+    return f"/api/alb/details?{function_name}={prompt_components}&&"
 
 def generate_albaran_all(generated_lines, function_name, prompts_list): #http://localhost:5000/api/alb/all?alb=984
     for idx, prompt in enumerate(prompts_list):

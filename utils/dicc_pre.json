@@ -21,6 +21,19 @@
       "todo_codigo": "allcode"
     },
     "albaranes": {
-      "todo_alb": "all"
-    }
+      "todo_alb": "alb",
+      "DetalleCliente": "alb"
+    },
+    "estadisticas": {
+      "cli_fact_cy": "cli_fact_cy",
+      "cliente_fact_total": "cli_fact_3",
+      "cliente_ing_anual": "cli_ing_cy",
+      "cliente_ing_total": "cli_ing_3",
+      "fact_total": "fact_total",
+      "fact_currenty": "fact_cy",
+      "fact_selecty": "fact_sy",
+      "ing_total": "ing_total",
+      "ing_currenty": "ing_cy",
+      "ing_selecty": "ing_sy"      
+    }    
   }

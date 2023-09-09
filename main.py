@@ -4,7 +4,7 @@ from gui.clients import ClientTab
 from gui.albaranes import AlbaranesTab
 from gui.training import TrainingTab
 from gui.articulos import ArticulosTab
-from gui.facturacio_stats import StatsTab
+from gui.facturacio_stats import EstadisticasTab
 
 class JsonLGenerator:
     def __init__(self, master):
@@ -24,7 +24,7 @@ class JsonLGenerator:
         self.tab_albaranes = AlbaranesTab(self.notebook)
         self.notebook.add(self.tab_albaranes.frame, text="Albarans")
         
-        self.tab_stats = StatsTab(self.notebook)
+        self.tab_stats = EstadisticasTab(self.notebook)
         self.notebook.add(self.tab_stats.frame, text="Facturacio Stats")
 
         self.tab_training = TrainingTab(self.notebook)
