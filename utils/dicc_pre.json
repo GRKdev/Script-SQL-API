@@ -14,8 +14,10 @@
     "articulos": {
       "Articulos": "info",
       "CodigoArticulo": "code",
-      "PrecioArticulo": "price",
-      "PrecioCode": "pricecode",
+      "PrecioArt_Coste": "price_cost",
+      "PrecioCode_Coste": "code_cost",
+      "PrecioArt_Venta": "price_buy",
+      "PrecioCode_Venta": "code_buy",      
       "CodeBar": "bar",
       "todo": "all",
       "todo_codigo": "allcode"

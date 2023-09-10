@@ -4,7 +4,7 @@ ALBARAN_QUERIES = [
     "alb {prompt}, quin es el marge",    
     "albarà {prompt}",
     "Albarà {prompt}",
-    "albara {prompt}",
+    "albara {prompt}, de quin client es",
     "Albara {prompt}",    
     "albra {prompt}",
     "Abarà {prompt}",

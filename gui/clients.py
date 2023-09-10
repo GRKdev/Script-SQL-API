@@ -26,7 +26,7 @@ class ClientTab:
         self.label_table.grid(row=0, column=0)
         self.entry_table = tk.Entry(self.frame)
         self.entry_table.grid(row=0, column=1)
-        self.entry_table.insert(0, "art")
+        self.entry_table.insert(0, "cli")
 
         self.label_global_train_count = tk.Label(self.frame, text="Cantidad Train Global:")
         self.label_global_train_count.grid(row=0, column=2)

@@ -1,5 +1,5 @@
 import json
-from querys.articulos.query_articulos import ARTICULOS_QUERIES, PROVEEDOR_QUERIES, PRECIO_ARTICULOS_QUERIES, ARTICULOS_COMPLETOS_QUERIES
+from querys.articulos.query_articulos import ARTICULOS_QUERIES, PROVEEDOR_QUERIES, PRECIO_ARTICULOS_QUERIES_COSTE, PRECIO_ARTICULOS_QUERIES_VENTA, ARTICULOS_COMPLETOS_QUERIES
 import random
 
 def filter_prompt(prompt):
@@ -76,9 +76,20 @@ def generate_proveedores_queries(generated_lines, table_name, function_name, pro
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_precioart_queries(generated_lines, table_name, function_name, prompts_list):
+def generate_precioart_queries_coste(generated_lines, table_name, function_name, prompts_list):
     for idx, prompt in enumerate(prompts_list):
-        query_format = PRECIO_ARTICULOS_QUERIES[idx % len(PRECIO_ARTICULOS_QUERIES)]
+        query_format = PRECIO_ARTICULOS_QUERIES_COSTE[idx % len(PRECIO_ARTICULOS_QUERIES_COSTE)]
+        prompt_text = query_format.format(prompt=prompt)
+        query = generate_url_query(table_name, function_name, prompt)
+        line = {
+            "prompt": prompt_text,
+            "completion": query
+        }
+        generated_lines.append(json.dumps(line, ensure_ascii=False))
+
+def generate_precioart_queries_venta(generated_lines, table_name, function_name, prompts_list):
+    for idx, prompt in enumerate(prompts_list):
+        query_format = PRECIO_ARTICULOS_QUERIES_VENTA[idx % len(PRECIO_ARTICULOS_QUERIES_VENTA)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt)
         line = {

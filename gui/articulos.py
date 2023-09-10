@@ -4,8 +4,8 @@ import os
 import json
 from utils.functions_articulos import (
     generate_custom_queries, load_prompts_from_json, generate_random_numbers,
-    generate_precioart_queries, generate_random_bars, generate_codebar_queries,
-    generate_toda_la_info
+    generate_precioart_queries_coste, generate_random_bars, generate_codebar_queries,
+    generate_toda_la_info, generate_precioart_queries_venta
 )
 
 
@@ -38,7 +38,7 @@ class ArticulosTab:
         self.button_toggle_all = tk.Button(self.frame, text="Toggle All", command=self.toggle_all)
         self.button_toggle_all.grid(row=1, column=3)
 
-        self.query_types = ["Articulos","CodigoArticulo","PrecioArticulo", "PrecioCode", "CodeBar","todo","todo_codigo"]
+        self.query_types = ["Articulos","CodigoArticulo","PrecioArt_Coste", "PrecioCode_Coste", "PrecioArt_Venta", "PrecioCode_Venta", "CodeBar","todo","todo_codigo"]
         self.query_entries = {}
         self.query_train_counts = {}
         self.query_checkbutton_vars = {}
@@ -89,8 +89,10 @@ class ArticulosTab:
                 train_data, valid_data = generate_random_numbers(train_count, valid_count)
             elif query_type == "CodeBar":
                 train_data, valid_data = generate_random_bars(train_count, valid_count)
-            elif query_type == "PrecioCode":
-                train_data, valid_data = generate_random_numbers(train_count, valid_count)            
+            elif query_type == "PrecioCode_Coste":
+                train_data, valid_data = generate_random_numbers(train_count, valid_count)       
+            elif query_type == "PrecioCode_Venta":
+                train_data, valid_data = generate_random_numbers(train_count, valid_count)                      
             else:
                 original_train_prompts = load_prompts_from_json()
                 original_valid_prompts = load_prompts_from_json()
@@ -107,18 +109,18 @@ class ArticulosTab:
         table_name = self.entry_table.get().strip()
         generated_lines = []
 
-        if query_type == "PrecioCode":
-            documento_tipo = "PrecioCode"            
-            generate_precioart_queries(generated_lines, table_name, function_name, prompts_list)
+        if query_type == "PrecioCode_Coste":
+            documento_tipo = "PrecioCode_Coste"            
+            generate_precioart_queries_coste(generated_lines, table_name, function_name, prompts_list)
         elif query_type == "Articulos":
             documento_tipo = "Articulos"            
             generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
         elif query_type == "CodigoArticulo":
             documento_tipo = "CodigoArticulo"            
             generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
-        elif query_type == "PrecioArticulo":
-            documento_tipo = "PrecioArticulo"            
-            generate_precioart_queries(generated_lines, table_name, function_name, prompts_list)         
+        elif query_type == "PrecioArt_Coste":
+            documento_tipo = "PrecioArt_Coste"            
+            generate_precioart_queries_coste(generated_lines, table_name, function_name, prompts_list)         
         elif query_type == "CodeBar":
             documento_tipo = "CodeBar"
             generate_codebar_queries(generated_lines, table_name, function_name, prompts_list)
@@ -128,7 +130,12 @@ class ArticulosTab:
         elif query_type == "todo_codigo":
             documento_tipo = "todo_codigo"            
             generate_toda_la_info(generated_lines, table_name, function_name, prompts_list)   
-
+        elif query_type == "PrecioArt_Venta":
+            documento_tipo = "PrecioArt_Venta"            
+            generate_precioart_queries_venta(generated_lines, table_name, function_name, prompts_list)    
+        elif query_type == "PrecioCode_Venta":
+            documento_tipo = "PrecioCode_Venta"            
+            generate_precioart_queries_venta(generated_lines, table_name, function_name, prompts_list)
 
         with open(filepath, 'a', encoding='utf-8') as file:
             for line in generated_lines:
