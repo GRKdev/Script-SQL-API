@@ -58,7 +58,7 @@ def generate_custom_queries(generated_lines, table_name, function_name, prompts_
     for idx, prompt in enumerate(prompts_list):
         query_format = ARTICULOS_QUERIES[idx % len(ARTICULOS_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -69,7 +69,7 @@ def generate_proveedores_queries(generated_lines, table_name, function_name, pro
     for idx, prompt in enumerate(prompts_list):
         query_format = PROVEEDOR_QUERIES[idx % len(PROVEEDOR_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -80,7 +80,7 @@ def generate_precioart_queries_coste(generated_lines, table_name, function_name,
     for idx, prompt in enumerate(prompts_list):
         query_format = PRECIO_ARTICULOS_QUERIES_COSTE[idx % len(PRECIO_ARTICULOS_QUERIES_COSTE)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -91,7 +91,7 @@ def generate_precioart_queries_venta(generated_lines, table_name, function_name,
     for idx, prompt in enumerate(prompts_list):
         query_format = PRECIO_ARTICULOS_QUERIES_VENTA[idx % len(PRECIO_ARTICULOS_QUERIES_VENTA)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -111,7 +111,7 @@ def generate_toda_la_info(generated_lines, table_name, function_name, prompts_li
     for idx, prompt in enumerate(prompts_list):
         query_format = ARTICULOS_COMPLETOS_QUERIES[idx % len(ARTICULOS_COMPLETOS_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query

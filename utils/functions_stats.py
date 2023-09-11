@@ -90,7 +90,7 @@ def generate_fact_total_client(generated_lines, table_name, function_name, promp
     for idx, prompt in enumerate(prompts_list):
         query_format = FACT_ANUALES_CLIENTES[idx % len(FACT_ANUALES_CLIENTES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query_prueba(table_name, function_name, prompt)
+        query = generate_url_query_prueba(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -101,7 +101,7 @@ def generate_ing_current_year_client(generated_lines, table_name, function_name,
     for idx, prompt in enumerate(prompts_list):
         query_format = GANANCIAS_CURRENT_YEAR_CLIENTES[idx % len(GANANCIAS_CURRENT_YEAR_CLIENTES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -112,7 +112,7 @@ def generate_ing_total_client(generated_lines, table_name, function_name, prompt
     for idx, prompt in enumerate(prompts_list):
         query_format = GANANCIAS_TOTALES_CLIENTES[idx % len(GANANCIAS_TOTALES_CLIENTES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query

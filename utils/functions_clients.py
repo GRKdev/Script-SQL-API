@@ -63,7 +63,7 @@ def generate_custom_queries(generated_lines, table_name, function_name, prompts_
     for idx, prompt in enumerate(prompts_list):
         query_format = CLIENT_QUERIES[idx % len(CLIENT_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -74,7 +74,7 @@ def generate_telefon_queries(generated_lines, table_name, function_name, prompts
     for idx, prompt in enumerate(prompts_list):
         query_format = TELEFON_QUERIES[idx % len(TELEFON_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -85,7 +85,7 @@ def generate_email_queries(generated_lines, table_name, function_name, prompts_l
     for idx, prompt in enumerate(prompts_list):
         query_format = EMAIL_QUERIES[idx % len(EMAIL_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -96,7 +96,7 @@ def generate_direccio_queries(generated_lines, table_name, function_name, prompt
     for idx, prompt in enumerate(prompts_list):
         query_format = DIRECCIO_QUERIES[idx % len(DIRECCIO_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
@@ -109,7 +109,7 @@ def generate_custom_queries_multi(generated_lines, table_name, function_name, pr
             query_format = CLIENT_MULTI_QUERIES[idx % len(CLIENT_MULTI_QUERIES)]
             prompt1, prompt2 = prompts_list[idx], prompts_list[idx + 1]
             prompt_text = query_format.format(prompt1=prompt1, prompt2=prompt2)
-            query = generate_url_query(table_name, function_name, prompt1, prompt2)
+            query = generate_url_query(table_name, function_name, prompt1.lower(), prompt2.lower())
             line = {
                 "prompt": prompt_text,
                 "completion": query
@@ -122,7 +122,7 @@ def generate_telefon_multi(generated_lines, table_name, function_name, prompts_l
             query_format = TELEFON_QUERIES_MULTIPLE[idx % len(TELEFON_QUERIES_MULTIPLE)]
             prompt1, prompt2 = prompts_list[idx], prompts_list[idx + 1]
             prompt_text = query_format.format(prompt1=prompt1, prompt2=prompt2)
-            query = generate_url_query(table_name, function_name, prompt1, prompt2)
+            query = generate_url_query(table_name, function_name, prompt1.lower(), prompt2.lower())
             line = {
                 "prompt": prompt_text,
                 "completion": query
@@ -135,7 +135,7 @@ def generate_email_multi(generated_lines, table_name, function_name, prompts_lis
             query_format = EMAIL_QUERIES_MULTIPLE[idx % len(EMAIL_QUERIES_MULTIPLE)]
             prompt1, prompt2 = prompts_list[idx], prompts_list[idx + 1]
             prompt_text = query_format.format(prompt1=prompt1, prompt2=prompt2)
-            query = generate_url_query(table_name, function_name, prompt1, prompt2)
+            query = generate_url_query(table_name, function_name, prompt1.lower(), prompt2.lower())
             line = {
                 "prompt": prompt_text,
                 "completion": query
@@ -148,7 +148,7 @@ def generate_direc_multi(generated_lines, table_name, function_name, prompts_lis
             query_format = DIRECCIO_QUERIES_MULTIPLE[idx % len(DIRECCIO_QUERIES_MULTIPLE)]
             prompt1, prompt2 = prompts_list[idx], prompts_list[idx + 1]
             prompt_text = query_format.format(prompt1=prompt1, prompt2=prompt2)
-            query = generate_url_query(table_name, function_name, prompt1, prompt2)
+            query = generate_url_query(table_name, function_name, prompt1.lower(), prompt2.lower())
             line = {
                 "prompt": prompt_text,
                 "completion": query
@@ -170,7 +170,7 @@ def generate_todo_clientes(generated_lines, table_name, function_name, prompts_l
     for idx, prompt in enumerate(prompts_list):
         query_format = CLIENTES_COMPLETOS_QUERIES[idx % len(CLIENTES_COMPLETOS_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query(table_name, function_name, prompt)
+        query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query

@@ -35,7 +35,7 @@ def generate_albaran_detalle_cliente(generated_lines, function_name, prompts_lis
     for idx, prompt in enumerate(prompts_list):
         query_format = ALB_CLIENT_DETAIL[idx % len(ALB_CLIENT_DETAIL)]
         prompt_text = query_format.format(prompt=prompt)
-        query = generate_url_query_details_client(function_name, prompt)
+        query = generate_url_query_details_client(function_name, prompt.lower())
         line = {
             "prompt": prompt_text,
             "completion": query
