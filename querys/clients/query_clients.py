@@ -69,7 +69,7 @@ CLIENT_QUERIES = [
     "Dame detalles del Cliente {prompt}, si hay algo sorprendente, dime.",
     "Perfil del cliente {prompt}. ¿Puedes darme una descripción completa?",
     "Cliente {prompt}. ¿Qué puedo hacer para ayudarlo mejor?",
-    "Información sobre el cliente {prompt} es lo que necesito. Por favor, incluye cualquier detalle relevante."    
+    "Información sobre el cliente {prompt} es lo que necesito. Por favor, incluye cualquier detalle relevante.",   
 ]
 
 CLIENTES_COMPLETOS_QUERIES = [
@@ -147,7 +147,7 @@ CLIENTES_COMPLETOS_QUERIES = [
     "Dona'm tota la informació del client {prompt} i afegix una nota especial si hi ha alguna.",
     "Info completa del client {prompt} és el que necessito ara mateix.",
     "Deixa'm llegir tot sobre el client {prompt}. Afegeix alguna anècdota si la tens.",
-    "Vull saber tot sobre el client {prompt}. Totes les dades que tinguis, si us plau."
+    "Vull saber tot sobre el client {prompt}. Totes les dades que tinguis, si us plau.",
 ]
 
 TELEFON_QUERIES = [
@@ -156,7 +156,7 @@ TELEFON_QUERIES = [
     "telefono {prompt}",
     "telefon {prompt}",
     "Teléfono {prompt}",
-    "tlefon {prompt}"
+    "tlefon {prompt}",
     "Telefon de {prompt}",
     "tlf {prompt}",
     "Tlf {prompt}",
@@ -188,7 +188,7 @@ TELEFON_QUERIES = [
     "tlf {prompt}",
     "Tlf {prompt}",
     "M'agradaria saber el telefon de {prompt}",
-    "Me gustaría saber el teléfono de {prompt}"
+    "Me gustaría saber el teléfono de {prompt}",
 ]
 
 EMAIL_QUERIES = [
@@ -249,11 +249,13 @@ DIRECCIO_QUERIES = [
     "Quin es el punt d'interès més proper a {prompt}?",
     "Dame les coordenades de {prompt}",
     "Quin es el domicili de {prompt}?",
+    "quin domicili te el client {prompt}?",
     "adreça {prompt}",
     "Adreça {prompt}",
     "direcció {prompt}",
     "direccio {prompt}",
     "on es {prompt}",
+    "donde queda el cliente {prompt}?",
     "dir {prompt}",
     "Com puc arribar a la casa de {prompt}?",
 ]
@@ -261,8 +263,8 @@ DIRECCIO_QUERIES = [
 CLIENTE_TELEFONO_QUERIES = [
     "El telefono {prompt}, de quién es?",
     "telefon {prompt}, de qui es?",
-    "el telefon {prompt} de quin client ws"
-    "El telefono {prompt}, dime el clirente"
+    "el telefon {prompt} de quin client ws",
+    "El telefono {prompt}, dime el clirente",
     "De quién es el teléfono {prompt}",
     "¿A qué cliente pertenece el número {prompt}?",
     "Quién tiene el teléfono {prompt}?",
@@ -292,20 +294,26 @@ CLIENTE_TELEFONO_QUERIES = [
     "Quin nom està associat al telèfon {prompt}?",
     "Nom del client amb telèfon {prompt}",
     "Coneixes al client del número {prompt}?",
-    "Busca el client amb telèfon {prompt}"
+    "Busca el client amb telèfon {prompt}",
 ]
 
 CLIENT_MULTI_QUERIES = [
     "info dels clients {prompt1} i {prompt2}",
-    "info de clientes {prompt1} i {prompt2}",
+    "info dels clients {prompt1} y {prompt2}",
+    "info delos clients {prompt1} y {prompt2}",
     "info de los clientes {prompt1} i {prompt2}",
+    "info de los clientes {prompt1} y {prompt2}",
+    "info de clientes {prompt1} i {prompt2}",
+    "info de los clientes {prompt1} y {prompt2}",
     "info de los clientes {prompt1} i {prompt2}, dame en formato lista",
     "Informació dels clients {prompt1} i {prompt2}",
     "Informació dels clients {prompt1} i {prompt2} que saps d'ells?",
     "info de clientes {prompt1} i {prompt2}, que sabes de ellos?",
     "Detalls del client {prompt1} i del client {prompt2}",
     "Dona'm info dels clients {prompt1} i {prompt2}",
+    "Dades dels clients {prompt1} y {prompt2}",
     "Vull dades dels clients {prompt1} i {prompt2}",
+    "Vull dades dels clients {prompt1} y {prompt2}",
     "Vull dades dels clients {prompt1} i {prompt2}, siusplau",
     "Qui són els clients {prompt1} i {prompt2}?",
     "Quien son los clientse {prompt1} i {prompt2}? Dame la información",
@@ -321,8 +329,12 @@ CLIENT_MULTI_QUERIES = [
     "Dame info de los clietes {prompt1} y {prompt2}",
     "Dame info de los clietes {prompt1} y {prompt2} profavor",
     "Quiero datos de los clientes {prompt1} y {prompt2}",
-    "Quiero datos de los clientes {prompt1} y {prompt2}, porfavor",
+    "datos de los clientes {prompt1} y {prompt2}, porfavor",
     "¿Quiénes son los clientes {prompt1} y {prompt2}?",
+    "quienes son los clientes: {prompt1} y {prompt2}?",
+    "info de clientes: {prompt1} y {prompt2}",
+    "info de clients: {prompt1} y {prompt2}",
+    "info de clinets: {prompt1} i {prompt2}",
     "¿Quiénes son los clientes {prompt1} y {prompt2}? Dame su información",
     "¿Tienes datos de los clientes {prompt1} y {prompt2}?",
     "Muéstrame los perfiles de los clientes {prompt1} y {prompt2}",
@@ -336,7 +348,7 @@ CLIENT_MULTI_QUERIES = [
     "Mostra'm Els Perfils Dels Clients {prompt1} i {prompt2}",
     "dona'M Info Dels Clients {prompt1} i {prompt2}",
     "vull Dades Dels Clients {prompt1} i {prompt2}",
-    "qui Són Els Clients {prompt1} i {prompt2}?"
+    "qui Són Els Clients {prompt1} i {prompt2}?",
 ]    
 
 TELEFON_QUERIES_MULTIPLE = [
@@ -362,7 +374,7 @@ TELEFON_QUERIES_MULTIPLE = [
     "On puc trobar els telefons de {prompt1} i {prompt2}?",
     "¿Dónde puedo encontrar los teléfonos de {prompt1} y {prompt2}?",
     "M'agradaria saber els telefons de {prompt1} i {prompt2}",
-    "Me gustaría saber los teléfonos de {prompt1} y {prompt2}"
+    "Me gustaría saber los teléfonos de {prompt1} y {prompt2}",
 ]
 
 DIRECCIO_QUERIES_MULTIPLE = [
@@ -390,17 +402,26 @@ DIRECCIO_QUERIES_MULTIPLE = [
     "M'agradaria saber on es localitzen {prompt1} i {prompt2}",
     "Me gustaría saber dónde están situados {prompt1} y {prompt2}",
     "Podries donar-me la ubicació exacta de {prompt1} i {prompt2}?",
-    "¿Podrías darme las coordenadas de {prompt1} y {prompt2}?"
+    "¿Podrías darme las coordenadas de {prompt1} y {prompt2}?",
 ]
 
 EMAIL_QUERIES_MULTIPLE = [
     "Quals són els emails dels clients {prompt1} i {prompt2}?",
+    "emails dels clients {prompt1} y {prompt2}?",
+    "els emails dels clients {prompt1} & {prompt2}?",
     "Quels correus tenen {prompt1} i {prompt2}?",
     "emails de {prompt1} y {prompt2}",
+    "mails de {prompt1} & {prompt2}",
+    "emails de {prompt1} i {prompt2}",
     "correus de {prompt1} i {prompt2}",
+    "correos elect de {prompt1} y {prompt2}",
+    "correos electr de {prompt1} & {prompt2}",
+    "correus de {prompt1} y {prompt2}",
     "Emails de {prompt1} y {prompt2}",
     "Necessito els correus de {prompt1} i {prompt2}",
+    "Necessito els correus de {prompt1} y {prompt2}",
     "Necesito los emails de {prompt1} y {prompt2}",
+    "Necesito los emails de {prompt1} i {prompt2}",
     "Vull els emails dels clients {prompt1} i {prompt2}",
     "Quiero los correos de los clientes {prompt1} y {prompt2}",
     "Pots dir-me els emails de {prompt1} i {prompt2}?",
@@ -408,6 +429,7 @@ EMAIL_QUERIES_MULTIPLE = [
     "Dona'm els correus de {prompt1} i {prompt2}",
     "Dame los emails de {prompt1} y {prompt2}",
     "Saps els correus de {prompt1} i {prompt2}?",
+    "Saps els correus de {prompt1} y {prompt2}?",
     "Sabes los emails de {prompt1} y {prompt2}?",
     "Quines són les adreces electròniques de {prompt1} i {prompt2}?",
     "¿Cuáles son los emails de {prompt1} y {prompt2}?",
@@ -416,5 +438,5 @@ EMAIL_QUERIES_MULTIPLE = [
     "On puc trobar els correus de {prompt1} i {prompt2}?",
     "¿Dónde puedo encontrar los emails de {prompt1} y {prompt2}?",
     "M'agradaria saber els emails de {prompt1} i {prompt2}",
-    "Me gustaría saber los correos de {prompt1} y {prompt2}"
+    "Me gustaría saber los correos de {prompt1} y {prompt2}",
 ]

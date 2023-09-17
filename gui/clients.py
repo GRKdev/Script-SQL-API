@@ -1,13 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
 from random import shuffle
+import random
 import json
 import os
 from utils.functions_clients import (
     generate_custom_queries, generate_telefon_queries, generate_email_queries,
     generate_direccio_queries, load_names_from_json, generate_custom_queries_multi,
     generate_direc_multi, generate_email_multi, generate_telefon_multi,
-    generate_from_telefon, generate_phone_numbers, generate_todo_clientes
+    generate_from_telefon, generate_phone_numbers, generate_todo_clientes,
+    controlled_shuffle
 )
 
 def load_predefined_values():
@@ -105,41 +107,42 @@ class ClientTab:
             self.generate_file(train_filepath, self.train_prompts_list, query_type, function_name)
             self.generate_file(valid_filepath, self.valid_prompts_list, query_type, function_name) 
 
-
     def generate_file(self, filepath, prompts_list, query_type, function_name):
+
+        is_valid = 'valid' in filepath
         table_name = self.entry_table.get().strip()
         generated_lines = []
 
         if query_type == "Telefon":
             documento_tipo = "Telefons"            
-            generate_telefon_queries(generated_lines, table_name, function_name, prompts_list)
+            generate_telefon_queries(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "Info_Basic":
             documento_tipo = "Clients"            
-            generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
+            generate_custom_queries(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "Email":
             documento_tipo = "Emails"            
-            generate_email_queries(generated_lines, table_name, function_name, prompts_list)
+            generate_email_queries(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "Direccion":
             documento_tipo = "Adreces"            
-            generate_direccio_queries(generated_lines, table_name, function_name, prompts_list)
+            generate_direccio_queries(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "Info_Multi":
             documento_tipo = "Custom_Multi"            
-            generate_custom_queries_multi(generated_lines, table_name, function_name, prompts_list)
+            generate_custom_queries_multi(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "Telefon_Multi":
             documento_tipo = "Telefon_Multi"            
-            generate_telefon_multi(generated_lines, table_name, function_name, prompts_list)
+            generate_telefon_multi(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "Email_Multi":
             documento_tipo = "Emails_Multi"            
-            generate_email_multi(generated_lines, table_name, function_name, prompts_list)
+            generate_email_multi(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "Direccion_Multi":
             documento_tipo = "Adreces_Multi"            
-            generate_direc_multi(generated_lines, table_name, function_name, prompts_list)
+            generate_direc_multi(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "Telefono_cliente":
             documento_tipo = "Telefono_cliente"            
-            generate_from_telefon(generated_lines, table_name, function_name, prompts_list)
+            generate_from_telefon(generated_lines, table_name, function_name, prompts_list, is_valid)
         elif query_type == "todo_cliente":
             documento_tipo = "todo_cliente"            
-            generate_todo_clientes(generated_lines, table_name, function_name, prompts_list)
+            generate_todo_clientes(generated_lines, table_name, function_name, prompts_list, is_valid)
 
         with open(filepath, 'a', encoding='utf-8') as file:
             for line in generated_lines:

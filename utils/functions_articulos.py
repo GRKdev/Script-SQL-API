@@ -30,20 +30,30 @@ def generate_random_numbers(train_count=100, valid_count=20, min_value=1, max_va
 def generate_random_bars(train_count=100, valid_count=20):
     half_train = train_count // 2
     half_valid = valid_count // 2
+    
+    segment_size_train = half_train // 9 if half_train // 9 != 0 else 1
+    segment_size_valid = half_valid // 9 if half_valid // 9 != 0 else 1
 
-    train_12_digits = [str(i) + str(random.randint(10**(10) , 10**(11) - 1)) for i in range(1, 10) for _ in range(half_train // 9)]
-    valid_12_digits = [str(i) + str(random.randint(10**(10) , 10**(11) - 1)) for i in range(1, 10) for _ in range(half_valid // 9)]
+    train_12_digits = [str(i) + str(random.randint(10**(10), 10**(11) - 1)) for i in range(1, 10) for _ in range(segment_size_train)]
+    valid_12_digits = [str(i) + str(random.randint(10**(10), 10**(11) - 1)) for i in range(1, 10) for _ in range(segment_size_valid)]
 
-    train_13_digits = [str(i) + str(random.randint(10**(11), 10**(12) - 1)) for i in range(1, 10) for _ in range(half_train // 9)]
-    valid_13_digits = [str(i) + str(random.randint(10**(11), 10**(12) - 1)) for i in range(1, 10) for _ in range(half_valid // 9)]
+    train_13_digits = [str(i) + str(random.randint(10**(11), 10**(12) - 1)) for i in range(1, 10) for _ in range(segment_size_train)]
+    valid_13_digits = [str(i) + str(random.randint(10**(11), 10**(12) - 1)) for i in range(1, 10) for _ in range(segment_size_valid)]
 
     train_prompts = train_12_digits + train_13_digits
     valid_prompts = valid_12_digits + valid_13_digits
+    
+    while len(train_prompts) < train_count:
+        train_prompts.append(str(random.randint(1, 9)) + str(random.randint(10**(10), 10**(12) - 1)))
+
+    while len(valid_prompts) < valid_count:
+        valid_prompts.append(str(random.randint(1, 9)) + str(random.randint(10**(10), 10**(12) - 1)))
+
     random.shuffle(train_prompts)
     random.shuffle(valid_prompts)
 
     return train_prompts, valid_prompts
-
+    return train_prompts, valid_prompts
 def load_prompts_from_json(filename="Documents/dicc/articulos/articulos_general.json"):
     with open(filename, 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -51,12 +61,12 @@ def load_prompts_from_json(filename="Documents/dicc/articulos/articulos_general.
 
 def generate_url_query(table_name, function_name, prompt):
     cleaned_prompt = filter_prompt(prompt)
-    prompt_components = ','.join(cleaned_prompt.split())  # Convert spaces to commas
+    prompt_components = ','.join(cleaned_prompt.split())
     return f"/api/{table_name}?{function_name}={prompt_components}&&"
 
-def generate_custom_queries(generated_lines, table_name, function_name, prompts_list):
+def generate_custom_queries(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = ARTICULOS_QUERIES[idx % len(ARTICULOS_QUERIES)]
+        query_format = random.choice(ARTICULOS_QUERIES) if is_valid else ARTICULOS_QUERIES[idx % len(ARTICULOS_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
@@ -65,9 +75,9 @@ def generate_custom_queries(generated_lines, table_name, function_name, prompts_
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_proveedores_queries(generated_lines, table_name, function_name, prompts_list):
+def generate_proveedores_queries(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = PROVEEDOR_QUERIES[idx % len(PROVEEDOR_QUERIES)]
+        query_format = random.choice(PROVEEDOR_QUERIES) if is_valid else PROVEEDOR_QUERIES[idx % len(PROVEEDOR_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
@@ -76,9 +86,9 @@ def generate_proveedores_queries(generated_lines, table_name, function_name, pro
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_precioart_queries_coste(generated_lines, table_name, function_name, prompts_list):
+def generate_precioart_queries_coste(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = PRECIO_ARTICULOS_QUERIES_COSTE[idx % len(PRECIO_ARTICULOS_QUERIES_COSTE)]
+        query_format = random.choice(PRECIO_ARTICULOS_QUERIES_COSTE) if is_valid else PRECIO_ARTICULOS_QUERIES_COSTE[idx % len(PRECIO_ARTICULOS_QUERIES_COSTE)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
@@ -87,9 +97,9 @@ def generate_precioart_queries_coste(generated_lines, table_name, function_name,
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_precioart_queries_venta(generated_lines, table_name, function_name, prompts_list):
+def generate_precioart_queries_venta(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = PRECIO_ARTICULOS_QUERIES_VENTA[idx % len(PRECIO_ARTICULOS_QUERIES_VENTA)]
+        query_format = random.choice(PRECIO_ARTICULOS_QUERIES_VENTA) if is_valid else PRECIO_ARTICULOS_QUERIES_VENTA[idx % len(PRECIO_ARTICULOS_QUERIES_VENTA)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
@@ -107,9 +117,9 @@ def generate_codebar_queries(generated_lines, table_name, function_name, prompts
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_toda_la_info(generated_lines, table_name, function_name, prompts_list):
+def generate_toda_la_info(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = ARTICULOS_COMPLETOS_QUERIES[idx % len(ARTICULOS_COMPLETOS_QUERIES)]
+        query_format = random.choice(ARTICULOS_COMPLETOS_QUERIES) if is_valid else ARTICULOS_COMPLETOS_QUERIES[idx % len(ARTICULOS_COMPLETOS_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {

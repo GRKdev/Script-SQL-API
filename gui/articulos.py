@@ -105,39 +105,32 @@ class ArticulosTab:
             self.generate_file(train_filepath, train_data, query_type, function_name)
             self.generate_file(valid_filepath, valid_data, query_type, function_name)
 
-    def generate_file(self, filepath, prompts_list, query_type, function_name): 
+    def generate_file(self, filepath, prompts_list, query_type, function_name):
+        is_valid = 'valid' in filepath
         table_name = self.entry_table.get().strip()
         generated_lines = []
-
-        if query_type == "PrecioCode_Coste":
-            documento_tipo = "PrecioCode_Coste"            
-            generate_precioart_queries_coste(generated_lines, table_name, function_name, prompts_list)
-        elif query_type == "Articulos":
-            documento_tipo = "Articulos"            
-            generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
-        elif query_type == "CodigoArticulo":
-            documento_tipo = "CodigoArticulo"            
-            generate_custom_queries(generated_lines, table_name, function_name, prompts_list)
-        elif query_type == "PrecioArt_Coste":
-            documento_tipo = "PrecioArt_Coste"            
-            generate_precioart_queries_coste(generated_lines, table_name, function_name, prompts_list)         
-        elif query_type == "CodeBar":
-            documento_tipo = "CodeBar"
+        
+        if query_type == "CodeBar":
             generate_codebar_queries(generated_lines, table_name, function_name, prompts_list)
-        elif query_type == "todo":
-            documento_tipo = "todo"            
-            generate_toda_la_info(generated_lines, table_name, function_name, prompts_list)            
-        elif query_type == "todo_codigo":
-            documento_tipo = "todo_codigo"            
-            generate_toda_la_info(generated_lines, table_name, function_name, prompts_list)   
-        elif query_type == "PrecioArt_Venta":
-            documento_tipo = "PrecioArt_Venta"            
-            generate_precioart_queries_venta(generated_lines, table_name, function_name, prompts_list)    
-        elif query_type == "PrecioCode_Venta":
-            documento_tipo = "PrecioCode_Venta"            
-            generate_precioart_queries_venta(generated_lines, table_name, function_name, prompts_list)
+        else:
+            query_type_map = {
+                'PrecioCode_Coste': generate_precioart_queries_coste,
+                'Articulos': generate_custom_queries,
+                'CodigoArticulo': generate_custom_queries,
+                'PrecioArt_Coste': generate_precioart_queries_coste,
+                'todo': generate_toda_la_info,
+                'todo_codigo': generate_toda_la_info,
+                'PrecioArt_Venta': generate_precioart_queries_venta,
+                'PrecioCode_Venta': generate_precioart_queries_venta
+            }
+            
+            query_func = query_type_map.get(query_type, None)
+            
+            if query_func:
+                query_func(generated_lines, table_name, function_name, prompts_list, is_valid) 
 
         with open(filepath, 'a', encoding='utf-8') as file:
             for line in generated_lines:
                 file.write(line + '\n')
-        return documento_tipo
+        
+        return query_type

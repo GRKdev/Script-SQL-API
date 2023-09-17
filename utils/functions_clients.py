@@ -58,10 +58,15 @@ def generate_phone_numbers(train_count=100, valid_count=20, country='es'):
     valid_prompts = [generate_phone_number(country) for _ in range(valid_count)]
     return train_prompts, valid_prompts
 
+def controlled_shuffle(lst, segment_size):
+    for i in range(0, len(lst), segment_size):
+        segment = lst[i:i+segment_size]
+        random.shuffle(segment)
+        lst[i:i+segment_size] = segment
 
-def generate_custom_queries(generated_lines, table_name, function_name, prompts_list):
+def generate_custom_queries(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = CLIENT_QUERIES[idx % len(CLIENT_QUERIES)]
+        query_format = random.choice(CLIENT_QUERIES) if is_valid else CLIENT_QUERIES[idx % len(CLIENT_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
@@ -70,9 +75,9 @@ def generate_custom_queries(generated_lines, table_name, function_name, prompts_
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_telefon_queries(generated_lines, table_name, function_name, prompts_list):
+def generate_telefon_queries(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = TELEFON_QUERIES[idx % len(TELEFON_QUERIES)]
+        query_format = random.choice(TELEFON_QUERIES) if is_valid else TELEFON_QUERIES[idx % len(TELEFON_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
@@ -81,9 +86,9 @@ def generate_telefon_queries(generated_lines, table_name, function_name, prompts
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_email_queries(generated_lines, table_name, function_name, prompts_list):
+def generate_email_queries(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = EMAIL_QUERIES[idx % len(EMAIL_QUERIES)]
+        query_format = random.choice(EMAIL_QUERIES) if is_valid else EMAIL_QUERIES[idx % len(EMAIL_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
@@ -92,9 +97,9 @@ def generate_email_queries(generated_lines, table_name, function_name, prompts_l
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_direccio_queries(generated_lines, table_name, function_name, prompts_list):
+def generate_direccio_queries(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = DIRECCIO_QUERIES[idx % len(DIRECCIO_QUERIES)]
+        query_format = random.choice(DIRECCIO_QUERIES) if is_valid else DIRECCIO_QUERIES[idx % len(DIRECCIO_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
@@ -103,10 +108,10 @@ def generate_direccio_queries(generated_lines, table_name, function_name, prompt
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_custom_queries_multi(generated_lines, table_name, function_name, prompts_list):
+def generate_custom_queries_multi(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx in range(0, len(prompts_list), 2):
         if idx + 1 < len(prompts_list):
-            query_format = CLIENT_MULTI_QUERIES[idx % len(CLIENT_MULTI_QUERIES)]
+            query_format = random.choice(CLIENT_MULTI_QUERIES) if is_valid else CLIENT_MULTI_QUERIES[idx % len(CLIENT_MULTI_QUERIES)]
             prompt1, prompt2 = prompts_list[idx], prompts_list[idx + 1]
             prompt_text = query_format.format(prompt1=prompt1, prompt2=prompt2)
             query = generate_url_query(table_name, function_name, prompt1.lower(), prompt2.lower())
@@ -116,10 +121,10 @@ def generate_custom_queries_multi(generated_lines, table_name, function_name, pr
             }
             generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_telefon_multi(generated_lines, table_name, function_name, prompts_list):
+def generate_telefon_multi(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx in range(0, len(prompts_list), 2):
         if idx + 1 < len(prompts_list):
-            query_format = TELEFON_QUERIES_MULTIPLE[idx % len(TELEFON_QUERIES_MULTIPLE)]
+            query_format = random.choice(TELEFON_QUERIES_MULTIPLE) if is_valid else TELEFON_QUERIES_MULTIPLE[idx % len(TELEFON_QUERIES_MULTIPLE)]
             prompt1, prompt2 = prompts_list[idx], prompts_list[idx + 1]
             prompt_text = query_format.format(prompt1=prompt1, prompt2=prompt2)
             query = generate_url_query(table_name, function_name, prompt1.lower(), prompt2.lower())
@@ -129,10 +134,10 @@ def generate_telefon_multi(generated_lines, table_name, function_name, prompts_l
             }
             generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_email_multi(generated_lines, table_name, function_name, prompts_list):
+def generate_email_multi(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx in range(0, len(prompts_list), 2):
         if idx + 1 < len(prompts_list):
-            query_format = EMAIL_QUERIES_MULTIPLE[idx % len(EMAIL_QUERIES_MULTIPLE)]
+            query_format = random.choice(EMAIL_QUERIES_MULTIPLE) if is_valid else EMAIL_QUERIES_MULTIPLE[idx % len(EMAIL_QUERIES_MULTIPLE)]
             prompt1, prompt2 = prompts_list[idx], prompts_list[idx + 1]
             prompt_text = query_format.format(prompt1=prompt1, prompt2=prompt2)
             query = generate_url_query(table_name, function_name, prompt1.lower(), prompt2.lower())
@@ -142,10 +147,10 @@ def generate_email_multi(generated_lines, table_name, function_name, prompts_lis
             }
             generated_lines.append(json.dumps(line, ensure_ascii=False))       
 
-def generate_direc_multi(generated_lines, table_name, function_name, prompts_list):
+def generate_direc_multi(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx in range(0, len(prompts_list), 2):
         if idx + 1 < len(prompts_list): 
-            query_format = DIRECCIO_QUERIES_MULTIPLE[idx % len(DIRECCIO_QUERIES_MULTIPLE)]
+            query_format = random.choice(DIRECCIO_QUERIES_MULTIPLE) if is_valid else DIRECCIO_QUERIES_MULTIPLE[idx % len(DIRECCIO_QUERIES_MULTIPLE)]
             prompt1, prompt2 = prompts_list[idx], prompts_list[idx + 1]
             prompt_text = query_format.format(prompt1=prompt1, prompt2=prompt2)
             query = generate_url_query(table_name, function_name, prompt1.lower(), prompt2.lower())
@@ -155,9 +160,9 @@ def generate_direc_multi(generated_lines, table_name, function_name, prompts_lis
             }
             generated_lines.append(json.dumps(line, ensure_ascii=False))            
 
-def generate_from_telefon(generated_lines, table_name, function_name, prompts_list):
+def generate_from_telefon(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = CLIENTE_TELEFONO_QUERIES[idx % len(CLIENTE_TELEFONO_QUERIES)]
+        query_format = random.choice(CLIENTE_TELEFONO_QUERIES) if is_valid else CLIENTE_TELEFONO_QUERIES[idx % len(CLIENTE_TELEFONO_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt)
         line = {
@@ -166,9 +171,9 @@ def generate_from_telefon(generated_lines, table_name, function_name, prompts_li
         }
         generated_lines.append(json.dumps(line, ensure_ascii=False))
 
-def generate_todo_clientes(generated_lines, table_name, function_name, prompts_list):
+def generate_todo_clientes(generated_lines, table_name, function_name, prompts_list, is_valid=False):
     for idx, prompt in enumerate(prompts_list):
-        query_format = CLIENTES_COMPLETOS_QUERIES[idx % len(CLIENTES_COMPLETOS_QUERIES)]
+        query_format = random.choice(CLIENTES_COMPLETOS_QUERIES) if is_valid else CLIENTES_COMPLETOS_QUERIES[idx % len(CLIENTES_COMPLETOS_QUERIES)]
         prompt_text = query_format.format(prompt=prompt)
         query = generate_url_query(table_name, function_name, prompt.lower())
         line = {
