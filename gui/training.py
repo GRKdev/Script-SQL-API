@@ -23,13 +23,13 @@ class TrainingTab:
         self.api_entry.grid(row=0, column=1, pady=10)
 
         self.upload_button = tk.Button(
-            self.frame, text="Subir Archivos", command=self.upload_and_get_ids
+            self.frame, text="Subir Archivos JSONL", command=self.upload_and_get_ids
         )
-        self.upload_button.grid(row=0, column=3, pady=20)
-        self.upload_button.config(width=11, height=2)
+        self.upload_button.grid(row=2, column=1, pady=20)
+        self.upload_button.config(width=15, height=2)
 
         self.model_label = tk.Label(self.frame, text="Modelo:")
-        self.model_label.grid(row=1, column=0, pady=10)
+        self.model_label.grid(row=2, column=0, pady=10)
 
         self.model_combo = ttk.Combobox(
             self.frame, values=["ada", "babbage-002", "gpt-3.5-turbo"]
@@ -46,47 +46,23 @@ class TrainingTab:
         self.final_button = tk.Button(
             self.frame, text="Enviar", command=self.send_final_query
         )
-        self.final_button.grid(row=3, column=2, pady=20)
+        self.final_button.grid(row=4, column=0, pady=20)
         self.final_button.config(bg="#7FFF7F")
         self.final_button.config(width=10, height=2)
 
         self.status_button = tk.Button(
             self.frame, text="Estado", command=self.check_status
         )
-        self.status_button.grid(row=3, column=3, pady=20)
+        self.status_button.grid(row=4, column=1, pady=20)
         self.status_button.config(width=10, height=2)
 
         self.cancel_button = tk.Button(
             self.frame, text="Cancelar", command=self.cancel_ft
         )
-        self.cancel_button.grid(row=3, column=4, pady=20)
+        self.cancel_button.grid(row=4, column=2, pady=20)
         self.cancel_button.config(bg="#FF7F84")
         self.cancel_button.config(width=10, height=2)
 
-        self.fine_tune_label = tk.Label(self.frame, text="Seleccionar ID:")
-        self.fine_tune_label.grid(row=5, column=0, pady=10)
-
-        self.fine_tune_combo = ttk.Combobox(self.frame, width=1)
-        self.fine_tune_combo.grid(row=5, column=1, pady=5)
-        self.update_fine_tune_ids()
-
-        self.check_selected_button = tk.Button(
-            self.frame, text="Verificar Estado", command=self.check_selected_status
-        )
-        self.check_selected_button.grid(row=5, column=3, pady=20)
-        self.check_selected_button.config(width=11, height=2)
-
-        self.tree = ttk.Treeview(
-            self.frame, columns=("ID", "Estado", "Costo", "Modelo Fine-Tuned")
-        )
-        self.tree.heading("#1", text="ID")
-        self.tree.heading("#2", text="Estado")
-        self.tree.heading("#3", text="Costo")
-        self.tree.heading("#4", text="Modelo Fine-Tuned")
-        self.tree.grid(row=6, columnspan=4, pady=20)
-        self.tree.column("#0", width=0, stretch=tk.NO)
-        self.fine_tuned_entry = tk.Entry(self.frame)
-        self.fine_tuned_entry.grid(row=7, column=1, pady=5)
 
     def set_api_key(self):
         openai.api_key = self.api_key
@@ -272,54 +248,3 @@ class TrainingTab:
             if cost:
                 status_message += f"\nCosto: ${cost}"
             tk.messagebox.showinfo("Estado del Entrenamiento", status_message)
-
-    def check_selected_status(self):
-        selected_message = self.fine_tune_combo.get()
-        if not selected_message:
-            messagebox.showerror("Error", "Selecciona un modelo de entrenamiento.")
-            return
-
-        selected_id = self.message_to_id_map.get(selected_message)
-        if not selected_id:
-            messagebox.showerror(
-                "Error", "No se encontró una ID para el mensaje seleccionado."
-            )
-            return
-
-        response = subprocess.check_output(
-            ["openai", "api", "fine_tunes.get", "-i", selected_id], text=True
-        )
-
-        data = json.loads(response)
-
-        error_messages = []
-
-        fine_tuned_model = data.get("fine_tuned_model", "N/A")
-        self.fine_tuned_entry.delete(0, tk.END)
-        self.fine_tuned_entry.insert(0, fine_tuned_model)
-
-        cost = next(
-            (
-                event["message"].split("$")[-1]
-                for event in data["events"]
-                if "Fine-tune costs" in event["message"]
-            ),
-            "N/A",
-        )
-
-        for file_type, files in [
-            ("Archivo de Entrenamiento", data.get("training_files", [])),
-            ("Archivo de Validación", data.get("validation_files", [])),
-        ]:
-            for file in files:
-                if file.get("status") == "error":
-                    error_detail = file.get("status_details", "Detalles desconocidos.")
-                    error_messages.append(f"{file_type}: {error_detail}")
-
-        if error_messages:
-            error_text = "\n".join(error_messages)
-            messagebox.showerror("Errores en los archivos", error_text)
-        else:
-            self.tree.insert(
-                "", "end", values=(selected_id, data["status"], cost, fine_tuned_model)
-            )

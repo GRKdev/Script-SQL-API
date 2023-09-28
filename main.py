@@ -11,24 +11,19 @@ class JsonLGenerator:
         self.master = master
         master.title("Script Jsonl Training - OpenAI")
 
-        self.notebook = ttk.Notebook(master)
-
         self.notebook = ttk.Notebook(master, style='TNotebook')
         
-        self.tab_clients = ClientTab(self.notebook)
-        self.notebook.add(self.tab_clients.frame, text="Clients")
+        tabs = [
+            (ClientTab, "Clients"),
+            (ArticulosTab, "Articulos"),
+            (AlbaranesTab, "Albarans"),
+            (EstadisticasTab, "Facturacio Stats"),
+            (TrainingTab, "Entrenar")
+        ]
         
-        self.tab_articulos = ArticulosTab(self.notebook)
-        self.notebook.add(self.tab_articulos.frame, text="Articulos")
-
-        self.tab_albaranes = AlbaranesTab(self.notebook)
-        self.notebook.add(self.tab_albaranes.frame, text="Albarans")
-        
-        self.tab_stats = EstadisticasTab(self.notebook)
-        self.notebook.add(self.tab_stats.frame, text="Facturacio Stats")
-
-        self.tab_training = TrainingTab(self.notebook)
-        self.notebook.add(self.tab_training.frame, text="Entrenar")
+        for tab_class, tab_name in tabs:
+            tab = tab_class(self.notebook)
+            self.notebook.add(tab.frame, text=tab_name)
 
         self.notebook.pack(expand=1, fill="both")
 

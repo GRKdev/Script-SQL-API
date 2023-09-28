@@ -16,6 +16,7 @@ FACT_ANUALES_Q = [
     "Informe global de facturacón",
     "Gráfica global de facturacón",
     "Facturación de los últimos años",
+    "¿Quál es la facturación anual en últimos años?",
     "Total facturado en los últimos años",
     "Total grrafica facturado en los últimos años",
     "Facturación acumulada en últimos años",

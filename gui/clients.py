@@ -108,43 +108,29 @@ class ClientTab:
             self.generate_file(valid_filepath, self.valid_prompts_list, query_type, function_name) 
 
     def generate_file(self, filepath, prompts_list, query_type, function_name):
-
         is_valid = 'valid' in filepath
         table_name = self.entry_table.get().strip()
         generated_lines = []
 
-        if query_type == "Telefon":
-            documento_tipo = "Telefons"            
-            generate_telefon_queries(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "Info_Basic":
-            documento_tipo = "Clients"            
-            generate_custom_queries(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "Email":
-            documento_tipo = "Emails"            
-            generate_email_queries(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "Direccion":
-            documento_tipo = "Adreces"            
-            generate_direccio_queries(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "Info_Multi":
-            documento_tipo = "Custom_Multi"            
-            generate_custom_queries_multi(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "Telefon_Multi":
-            documento_tipo = "Telefon_Multi"            
-            generate_telefon_multi(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "Email_Multi":
-            documento_tipo = "Emails_Multi"            
-            generate_email_multi(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "Direccion_Multi":
-            documento_tipo = "Adreces_Multi"            
-            generate_direc_multi(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "Telefono_cliente":
-            documento_tipo = "Telefono_cliente"            
-            generate_from_telefon(generated_lines, table_name, function_name, prompts_list, is_valid)
-        elif query_type == "todo_cliente":
-            documento_tipo = "todo_cliente"            
-            generate_todo_clientes(generated_lines, table_name, function_name, prompts_list, is_valid)
+        query_types = {
+            "Telefon": ("Telefons", generate_telefon_queries),
+            "Info_Basic": ("Clients", generate_custom_queries),
+            "Email": ("Emails", generate_email_queries),
+            "Direccion": ("Adreces", generate_direccio_queries),
+            "Info_Multi": ("Custom_Multi", generate_custom_queries_multi),
+            "Telefon_Multi": ("Telefon_Multi", generate_telefon_multi),
+            "Email_Multi": ("Emails_Multi", generate_email_multi),
+            "Direccion_Multi": ("Adreces_Multi", generate_direc_multi),
+            "Telefono_cliente": ("Telefono_cliente", generate_from_telefon),
+            "todo_cliente": ("todo_cliente", generate_todo_clientes)
+        }
 
-        with open(filepath, 'a', encoding='utf-8') as file:
-            for line in generated_lines:
-                file.write(line + '\n')
-        return documento_tipo
+        if query_type in query_types:
+            documento_tipo, generate_func = query_types[query_type]
+            generate_func(generated_lines, table_name, function_name, prompts_list, is_valid)
+
+            with open(filepath, 'a', encoding='utf-8') as file:
+                for line in generated_lines:
+                    file.write(line + '\n')
+
+            return documento_tipo
