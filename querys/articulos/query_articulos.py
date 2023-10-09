@@ -6,6 +6,7 @@ ARTICULOS_QUERIES = [
     "art info {prompt}",
     "Info art {prompt}",
     "articulo {prompt}",
+    "info articulo codigo {prompt}",
     "info articulo {prompt}",
     "Art {prompt}",
     "Articulo {prompt}",
@@ -15,7 +16,7 @@ ARTICULOS_QUERIES = [
     "art {prompt}, dame info",
     "articulo {prompt} cuanto estoc tenemos",
     "Art {prompt}",
-    "Articulo {prompt} dime más",    
+    "Articulo {prompt} dime más",
     "dame información del artículo {prompt}",
     "info del artículo {prompt}",
     "dona'm informació de l'article {prompt}",
@@ -90,10 +91,10 @@ ARTICULOS_QUERIES = [
     "Dona'm el resum de l'art. {prompt}",
     "Vull el contingut de l'Art. {prompt}",
     "Explica'm sobre l'article {prompt}",
-    "Necessito detalls de l'article {prompt}",    
+    "Necessito detalls de l'article {prompt}",
     "Necesito detalles del artículo {prompt}",
-    "Necessito detalls de l'article {prompt} siusplau",    
-    "Necesito detalles del artículo {prompt} porfavor"    
+    "Necessito detalls de l'article {prompt} siusplau",
+    "Necesito detalles del artículo {prompt} porfavor",
 ]
 
 PROVEEDOR_QUERIES = [
@@ -136,7 +137,7 @@ PROVEEDOR_QUERIES = [
     "¿De on {prompt}?",
     "¿Dónde se adquiere {prompt}?",
     "Source de {prompt}",
-    "Origen {prompt}"    
+    "Origen {prompt}",
 ]
 
 PRECIO_ARTICULOS_QUERIES_COSTE = [
@@ -216,8 +217,8 @@ PRECIO_ARTICULOS_QUERIES_COSTE = [
     "Dona'm el preu de l'art. {prompt} vull el preu de compra",
     "Vull el preu de l'Art. {prompt}",
     "Explica'm quant val l'article {prompt}",
-    "Necessito el preu de cost de l'article {prompt}",    
-    "Necesito el precio cmpra del artículo {prompt}"
+    "Necessito el preu de cost de l'article {prompt}",
+    "Necesito el precio cmpra del artículo {prompt}",
 ]
 
 PRECIO_ARTICULOS_QUERIES_VENTA = [
@@ -287,18 +288,18 @@ PRECIO_ARTICULOS_QUERIES_VENTA = [
     "Vull el preu de l'Art. {prompt} en venda",
     "Explica'm quant val l'article {prompt} en venda",
     "Necessito el preu de venda de l'article {prompt}",
-    "Necesito el precio venta del artículo {prompt}"
+    "Necesito el precio venta del artículo {prompt}",
 ]
 
 ARTICULOS_COMPLETOS_QUERIES = [
     "dame toda la información del artículo {prompt}",
     "dame toda información del producto {prompt}",
     "tot info art {prompt}",
-    "tota la info article {prompt}",    
-    "tota la info producte {prompt}",    
-    "tota info article {prompt}, vull saber el proveidor, marca i familia",    
-    "tota la info article {prompt}, me interesa el precio de compra y la familia",    
-    "tota la info article {prompt}, donam el preu de venda i de cost",    
+    "tota la info article {prompt}",
+    "tota la info producte {prompt}",
+    "tota info article {prompt}, vull saber el proveidor, marca i familia",
+    "tota la info article {prompt}, me interesa el precio de compra y la familia",
+    "tota la info article {prompt}, donam el preu de venda i de cost",
     "toda la info de articu {prompt}",
     "toda la info articulo {prompt}",
     "toda la info producto {prompt}",
@@ -340,5 +341,5 @@ ARTICULOS_COMPLETOS_QUERIES = [
     "datos íntegros del artículo {prompt}",
     "vull saber tot sobre l'article {prompt}",
     "informació íntegra de l'article {prompt}",
-    "datos íntegros de l'article {prompt}"
+    "datos íntegros de l'article {prompt}",
 ]

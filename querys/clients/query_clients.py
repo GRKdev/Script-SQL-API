@@ -4,6 +4,11 @@ CLIENT_QUERIES = [
     "cli inf {prompt}",
     "inf cli {prompt}",
     "cliente {prompt}",
+    "client {prompt}",
+    "Client {prompt}",
+    "Cliente {prompt}",
+    "Clente {prompt}",
+    "cliente {prompt}",
     "info cliente {prompt}",
     "info Cliente {prompt}",
     "info Clente {prompt}",
@@ -77,11 +82,15 @@ CLIENT_QUERIES = [
     "Quiero saber más del Cliente {prompt}, especialmente su historial.",
     "Dame detalles del Cliente {prompt}, si hay algo sorprendente, dime.",
     "Cliente {prompt}. ¿Qué puedo hacer para ayudarlo mejor?",
-    "Información sobre el cliente {prompt} es lo que necesito. Por favor, incluye cualquier detalle relevante.",   
+    "Información sobre el cliente {prompt} es lo que necesito. Por favor, incluye cualquier detalle relevante.",
 ]
 
 CLIENTES_COMPLETOS_QUERIES = [
     "todo sobre cliente {prompt}",
+    "dame toda la info de {prompt}, la forma de pago",
+    "dame toda la info del cliente {prompt}, la forma de pago",
+    "dame toda la info de {prompt}, la forma de pago, el telefono y el email",
+    "dame toda la info de {prompt}, la dirección, el telefono y el email",
     "todo la info del cliente {prompt}",
     "toda info cliete {prompt}",
     "todo del cliente {prompt}",
@@ -110,7 +119,7 @@ CLIENTES_COMPLETOS_QUERIES = [
     "tot info clietn {prompt}",
     "perfil completo clietne {prompt}",
     "datos completo clietn {prompt}",
-    "perfil complet clint {prompt} siusplau",    
+    "perfil complet clint {prompt} siusplau",
     "dame toda la información del cliente {prompt}",
     "quiero todos los detalles del cliente {prompt}",
     "necesito la información completa del cliente {prompt}",
@@ -168,6 +177,8 @@ TELEFON_QUERIES = [
     "telefono cliente {prompt}",
     "telefon {prompt}",
     "Teléfono {prompt}",
+    "telefono {prompt}",
+    "Telefono {prompt}",
     "teléfono lciente {prompt}",
     "tlefon {prompt}",
     "Telefon de {prompt}",
@@ -237,13 +248,13 @@ EMAIL_QUERIES = [
     "Vull contactar {prompt} per correu, quin és?",
     "email {prompt}",
     "emil {prompt}",
-    "eail {prompt}",        
+    "eail {prompt}",
     "Email {prompt}",
     "correu {prompt}",
     "Correu {prompt}",
     "mail {prompt}",
     "Mail {prompt}",
-    "Com puc enviar un email a {prompt}?"
+    "Com puc enviar un email a {prompt}?",
 ]
 
 DIRECCIO_QUERIES = [
@@ -373,7 +384,7 @@ CLIENT_MULTI_QUERIES = [
     "dona'M Info Dels Clients {prompt1} i {prompt2}",
     "vull Dades Dels Clients {prompt1} i {prompt2}",
     "qui Són Els Clients {prompt1} i {prompt2}?",
-]    
+]
 
 TELEFON_QUERIES_MULTIPLE = [
     "Qual es el telefono del cliente {prompt1} y del cliente {prompt2}?",
