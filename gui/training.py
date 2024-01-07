@@ -29,7 +29,7 @@ class TrainingTab:
         self.upload_button.config(width=15, height=2)
 
         self.model_label = tk.Label(self.frame, text="Modelo:")
-        self.model_label.grid(row=2, column=0, pady=10)
+        self.model_label.grid(row=1, column=0, pady=10)
 
         self.model_combo = ttk.Combobox(
             self.frame, values=["ada", "babbage-002", "gpt-3.5-turbo"]
@@ -37,29 +37,35 @@ class TrainingTab:
         self.model_combo.grid(row=1, column=1, pady=10)
         self.model_combo.current(0)
 
+        self.epoch_label = tk.Label(self.frame, text="Epochs:")
+        self.epoch_label.grid(row=3, column=0, pady=10)
+
+        self.epoch_entry = tk.Entry(self.frame, width=30)
+        self.epoch_entry.grid(row=3, column=1, pady=10)
+
         self.message_label = tk.Label(self.frame, text="Mensaje:")
-        self.message_label.grid(row=3, column=0, pady=10)
+        self.message_label.grid(row=4, column=0, pady=10)
 
         self.message_entry = tk.Entry(self.frame, width=30)
-        self.message_entry.grid(row=3, column=1, pady=10)
+        self.message_entry.grid(row=4, column=1, pady=10)
 
         self.final_button = tk.Button(
             self.frame, text="Enviar", command=self.send_final_query
         )
-        self.final_button.grid(row=4, column=0, pady=20)
+        self.final_button.grid(row=5, column=0, pady=20)
         self.final_button.config(bg="#7FFF7F")
         self.final_button.config(width=10, height=2)
 
         self.status_button = tk.Button(
             self.frame, text="Estado", command=self.check_status
         )
-        self.status_button.grid(row=4, column=1, pady=20)
+        self.status_button.grid(row=5, column=1, pady=20)
         self.status_button.config(width=10, height=2)
 
         self.cancel_button = tk.Button(
             self.frame, text="Cancelar", command=self.cancel_ft
         )
-        self.cancel_button.grid(row=4, column=2, pady=20)
+        self.cancel_button.grid(row=5, column=2, pady=20)
         self.cancel_button.config(bg="#FF7F84")
         self.cancel_button.config(width=10, height=2)
 
@@ -139,6 +145,7 @@ class TrainingTab:
     def send_final_query_babbage_gpt(self):
         message = self.message_entry.get().strip()
         selected_model = self.model_combo.get()
+        epoch = self.epoch_entry.get().strip()
 
         try:
             response = openai.fine_tuning.jobs.create(
@@ -146,6 +153,9 @@ class TrainingTab:
                 validation_file=self.valid_id,
                 model=selected_model,
                 suffix=message,
+                hyperparameters={
+                    "n_epochs": epoch,
+                },
             )
 
             fine_tune_id = response.id
