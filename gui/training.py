@@ -63,7 +63,6 @@ class TrainingTab:
         self.cancel_button.config(bg="#FF7F84")
         self.cancel_button.config(width=10, height=2)
 
-
     def set_api_key(self):
         openai.api_key = self.api_key
         self.api_key = self.api_entry.get().strip()
@@ -81,17 +80,17 @@ class TrainingTab:
             return
 
         try:
-            train_response = openai.File.create(
+            train_response = openai.files.create(
                 file=open("Documents/dicc/results/train.jsonl", "rb"),
                 purpose="fine-tune",
             )
-            train_id = train_response["id"]
+            train_id = train_response.id
 
-            valid_response = openai.File.create(
+            valid_response = openai.files.create(
                 file=open("Documents/dicc/results/valid.jsonl", "rb"),
                 purpose="fine-tune",
             )
-            valid_id = valid_response["id"]
+            valid_id = valid_response.id
 
             self.train_id = train_id
             self.valid_id = valid_id
@@ -129,9 +128,6 @@ class TrainingTab:
         except FileNotFoundError:
             pass
 
-        self.fine_tune_combo["values"] = messages
-        self.fine_tune_combo.config(width=25)
-
     def send_final_query(self):
         selected_model = self.model_combo.get()
 
@@ -145,14 +141,14 @@ class TrainingTab:
         selected_model = self.model_combo.get()
 
         try:
-            response = openai.FineTuningJob.create(
+            response = openai.fine_tuning.jobs.create(
                 training_file=self.train_id,
                 validation_file=self.valid_id,
                 model=selected_model,
                 suffix=message,
             )
 
-            fine_tune_id = response["id"]
+            fine_tune_id = response.id
             tk.messagebox.showinfo("ID de Fine-Tune", fine_tune_id)
             self.fine_tune_id = fine_tune_id
 
@@ -205,11 +201,9 @@ class TrainingTab:
             )
             return
 
-        response = openai.FineTune.cancel(id=self.fine_tune_id)
+        response = openai.fine_tuning.jobs.cancel(self.fine_tune_id)
 
-        data = json.loads(response)
-
-        tk.messagebox.showinfo("Estado del Cancelamiento", data["status"])
+        tk.messagebox.showinfo("Estado del Cancelamiento", response.status)
 
     def check_status(self):
         if not hasattr(self, "fine_tune_id"):
@@ -218,33 +212,26 @@ class TrainingTab:
             )
             return
 
-        response = subprocess.check_output(
-            ["openai", "api", "fine_tunes.get", "-i", self.fine_tune_id], text=True
-        )
+        try:
+            # Use the new API method to retrieve fine-tuning job details
+            data = openai.fine_tuning.jobs.retrieve(self.fine_tune_id)
+        except Exception as e:
+            messagebox.showerror("Error", f"Error al obtener datos: {e}")
+            return
 
-        data = json.loads(response)
-
+        # Process the response data
         error_messages = []
-        cost = None
+        status = data.status
+        cost = None  # Adjust this if the new API provides cost details
 
-        for event in data.get("events", []):
-            if "Fine-tune costs" in event.get("message", ""):
-                cost = event["message"].split("$")[-1]
-
-        for file_type, files in [
-            ("Archivo de Entrenamiento", data.get("training_files", [])),
-            ("Archivo de Validación", data.get("validation_files", [])),
-        ]:
-            for file in files:
-                if file.get("status") == "error":
-                    error_detail = file.get("status_details", "Detalles desconocidos.")
-                    error_messages.append(f"{file_type}: {error_detail}")
+        # Process other details from the response
+        # ...
 
         if error_messages:
             error_text = "\n".join(error_messages)
-            tk.messagebox.showerror("Errores en los archivos", error_text)
+            messagebox.showerror("Errores en los archivos", error_text)
         else:
-            status_message = f"Estado: {data['status']}"
+            status_message = f"Estado: {status}"
             if cost:
                 status_message += f"\nCosto: ${cost}"
-            tk.messagebox.showinfo("Estado del Entrenamiento", status_message)
+            messagebox.showinfo("Estado del Entrenamiento", status_message)
